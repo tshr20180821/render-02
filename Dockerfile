@@ -1,3 +1,3 @@
-FROM node:8.2-apache
+FROM node:18.12.1
 
 RUN apt-get update
