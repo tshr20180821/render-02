@@ -25,7 +25,7 @@ function test20230411($log_)
 
 function get_contents($log_, $url_, $options_ = null)
 {
-    $log_->info('BEGIN')
+    $log_->info('BEGIN');
     $log_->info("URL : ${url_}");
 
     $options = [
