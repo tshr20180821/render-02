@@ -19,7 +19,7 @@ function test20230411($log_)
 {
     $log_->info('BEGIN');
     
-    $url = getenv('URL001');
+    $url = $_ENV['URL001'];
     $res = get_contents($log_, $url);
 }
 
