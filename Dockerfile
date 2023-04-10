@@ -19,6 +19,8 @@ COPY ./class/log.php /usr/src/app/
 COPY ./index.html /var/www/html/
 COPY ./auth/*.php /var/www/html/auth/
 
+COPY ./start.sh /usr/src/app/
+
 RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 ENTRYPOINT ["bash","/usr/src/app/start.sh"]
