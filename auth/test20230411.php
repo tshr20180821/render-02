@@ -22,15 +22,26 @@ function test20230411($log_)
     $option = [CURLOPT_COOKIEJAR => '/tmp/cookie',
               CURLOPT_COOKIEFILE => '/tmp/cookie',];
     
-    // $url = $_ENV['URL001'];
-    // $res = get_contents($log_, $url, $option);
-    // $log_->info($res);
-    // $log_->info(file_get_contents('/tmp/cookie'));
-    
-    $url = $_ENV['URL002'];
+    $url = $_ENV['URL001'];
     $res = get_contents($log_, $url, $option);
     $log_->info($res);
     $log_->info(file_get_contents('/tmp/cookie'));
+    
+    $post_data = [
+        'txt_word1' => $_ENV['WORD01'],
+        'cmb_like1' => '2',
+        'cmb_unit1' => '0',
+        'cmb_order' => 'pubYear',
+        'opt_order' => '1',
+        'opt_pagesize' => '50',
+        'chk_hol1tp' => '40',
+    ];
+    
+    $option = [CURLOPT_COOKIEJAR => '/tmp/cookie',
+              CURLOPT_COOKIEFILE => '/tmp/cookie',
+              CURLOPT_POST => true,
+              CURLOPT_POSTFIELDS => http_build_query($post_data),
+              ];
 }
 
 function get_contents($log_, $url_, $options_ = null)
