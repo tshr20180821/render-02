@@ -2,6 +2,8 @@
 
 set -x
 
+cat /var/www/html/auth/test20230411.php
+
 export DEPLOY_DATETIME=$(date +'%Y%m%d%H%M%S')
 sed -i s/__DEPLOY_DATETIME__/${DEPLOY_DATETIME}/ /etc/apache2/sites-enabled/apache.conf
 
