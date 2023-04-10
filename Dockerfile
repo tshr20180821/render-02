@@ -1,3 +1,5 @@
-FROM node:18.12.1
+FROM php:8.2-apache
 
-RUN apt-get update
+WORKDIR /usr/src/app
+
+ENTRYPOINT ["bash","/usr/src/app/start.sh"]
