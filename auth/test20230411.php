@@ -79,6 +79,7 @@ function test20230411($log_)
         'cmb_order' => 'pubYear',
         'opt_order' => '1',
         'opt_pagesize' => '25',
+        'submit_btn_searchDetailSelAr' => '検索',
     ];
     
     $option = [CURLOPT_COOKIEJAR => '/tmp/cookie',
@@ -89,6 +90,7 @@ function test20230411($log_)
     
     $log_->info(http_build_query($post_data));
     
+    $url = $_ENV['URL002'];
     $res = get_contents($log_, $url, $option);
     $log_->info($res);
     $log_->info(file_get_contents('/tmp/cookie'));
