@@ -24,7 +24,7 @@ function test20230411($log_)
     
     $url = $_ENV['URL001'];
     $res = get_contents($log_, $url, $option);
-    $log_->info($res);
+    // $log_->info($res);
     $log_->info(file_get_contents('/tmp/cookie'));
     
     $url = $_ENV['URL002'];
