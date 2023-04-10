@@ -21,6 +21,7 @@ function test20230411($log_)
     
     $url = $_ENV['URL001'];
     $res = get_contents($log_, $url);
+    $log_->info($res);
 }
 
 function get_contents($log_, $url_, $options_ = null)
