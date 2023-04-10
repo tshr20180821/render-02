@@ -24,7 +24,7 @@ function test20230411($log_)
     
     $url = $_ENV['URL001'];
     $res = get_contents($log_, $url, $option);
-    $log_->info($res);
+    // $log_->info($res);
     $log_->info(file_get_contents('/tmp/cookie'));
     
     $post_data = [
@@ -42,6 +42,10 @@ function test20230411($log_)
               CURLOPT_POST => true,
               CURLOPT_POSTFIELDS => http_build_query($post_data),
               ];
+    
+    $res = get_contents($log_, $url, $option);
+    $log_->info($res);
+    $log_->info(file_get_contents('/tmp/cookie'));
 }
 
 function get_contents($log_, $url_, $options_ = null)
