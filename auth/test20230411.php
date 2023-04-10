@@ -19,7 +19,8 @@ function test20230411($log_)
 {
     $log_->info('BEGIN');
     
-    $option = [CURLOPT_COOKIEJAR => '/tmp/cookie']
+    $option = [CURLOPT_COOKIEJAR => '/tmp/cookie',
+              CURLOPT_COOKIEFILE => '/tmp/cookie',];
     
     $url = $_ENV['URL001'];
     $res = get_contents($log_, $url, $option);
