@@ -28,6 +28,7 @@ function test20230411($log_)
     $log_->info(file_get_contents('/tmp/cookie'));
     
     $post_data = [
+        'cmb_column1' => 'title',
         'txt_word1' => $_ENV['WORD01'],
         'cmb_like1' => '2',
         'cmb_unit1' => '0',
