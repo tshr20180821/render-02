@@ -76,7 +76,7 @@ function test20230411($log_)
     $option = [CURLOPT_COOKIEJAR => '/tmp/cookie',
               CURLOPT_COOKIEFILE => '/tmp/cookie',
               CURLOPT_POST => true,
-              CURLOPT_POSTFIELDS => http_build_query($post_data) . $chk_area;
+              CURLOPT_POSTFIELDS => http_build_query($post_data) . $chk_area,
               ];
     
     $log_->info(http_build_query($post_data));
