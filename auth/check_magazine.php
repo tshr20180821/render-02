@@ -43,20 +43,108 @@ __HEREDOC__;
     $results = $statement_select->fetchAll();
     
     foreach ($results as $row) {
-        $log->info('m_magazine_data select result : ' . $row['symbol'] . ' ' . $row['title']);
-        $symbol = $row['symbol'];
-        $title = $row['title'];
-        $bibid_last = $row['bibid'];
-
-        $option = [CURLOPT_COOKIEJAR => '/tmp/cookie',
-                  CURLOPT_COOKIEFILE => '/tmp/cookie',];
-
-        $url = get_env('LIB_URL_01');
-        $res = get_contents($url, $option);
+        $log->info('m_magazine_data select result : ' . $row['symbol'] . ' ' . $row['title'] . ' ' . $row['bibid']);
+        
+        access_library($pdo_sqlite, $row['symbol'], $row['title'], $row['bibid'])
     }
     
-    
     $pdo_sqlite = null;
+}
+
+function access_library($pdo_sqlite_, $symbol_, $title_, $bibid_last_)
+{
+    global $log;
+    $log->info('BEGIN');
+
+    $cookie = '/tmp/cookie';
+    clearstatcache();
+    @unlink($cookie);
+    
+    $options = [
+        CURLOPT_COOKIEJAR => $cookie,
+        CURLOPT_COOKIEFILE => $cookie,
+    ];
+
+    $res = get_contents(get_env('LIB_URL_01'), $options);
+    
+    $post_data = [
+        'cmb_column1' => 'title',
+        'txt_word1' => $title_,
+        'cmb_like1' => '2',
+        'cmb_unit1' => '0',
+        'cmb_column2' => 'author',
+        'txt_word2' => '',
+        'cmb_like2' => '2',
+        'cmb_unit2' => '0',
+        'cmb_column3' => 'publisher',
+        'txt_word3' => '',
+        'cmb_like3' => '2',
+        'cmb_unit3' => '0',
+        'cmb_column4' => 'subject',
+        'txt_word4' => '',
+        'cmb_like4' => '2',
+        'cmb_unit4' => '0',
+        'selectlang' => '',
+        'cmb_column5' => 'langkb',
+        'txt_word5' => '',
+        'cmb_like5' => '2',
+        'cmb_unit5' => '0',
+        'txt_ndc' => '',
+        'txt_ndcword' => '',
+        'txt_stpubdate' => '',
+        'txt_edpubdate' => '',
+        'cmb_volume_column' => 'volume',
+        'txt_stvolume' => '',
+        'txt_edvolume' => '',
+        'cmb_code_column' => 'isbn',
+        'txt_code' => '',
+        'txt_lom' => '',
+        'txt_cln1' => '',
+        'txt_cln2' => '',
+        'txt_cln3' => '',
+        'chk_hol1tp' => '40',
+        'cmb_order' => 'pubYear',
+        'opt_order' => '1',
+        'opt_pagesize' => '25',
+        'submit_btn_searchDetailSelAr' => '検索',
+    ];
+    
+    $chk_area = '';
+    for ($i = 0; $i < 13; $i++) {
+        $chk_area .= '&chk_area=' . str_pad($i + 1, 2, '0', STR_PAD_LEFT);
+    }
+    $options = [
+        CURLOPT_COOKIEJAR => $cookie,
+        CURLOPT_COOKIEFILE => $cookie,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => http_build_query($post_data) . $chk_area,
+    ];
+    
+    $res = get_contents(get_env('LIB_URL_01'), $options);
+    
+    $rc = preg_match_all('/<a href="\/winj\/opac\/switch-detail\.do\?idx=.+?<\/a>/s', $res, $matches);
+    
+    $idx = -1;
+    foreach ($matches[0] as &$line) {
+        $rc = preg_match('/<a href="\/winj\/opac\/switch-detail\.do\?idx=(\d+).+?>' . $title_ . '</s', $line, $match);
+        if ($rc === 0) {
+            continue;
+        }
+        $log_->info(print_r($match, true));
+        $idx = $match[1];
+    }
+    
+    $options = [
+        CURLOPT_COOKIEJAR => $cookie,
+        CURLOPT_COOKIEFILE => $cookie,
+    ];
+    
+    $res = get_contents(get_env('LIB_URL_02') . $idx, $options);
+    
+    $res = get_contents(get_env('LIB_URL_03'), $options);
+    
+    $rc = preg_match('/<input type="hidden" name="bibid" value="(.+?)"/', $res, $match);
+    $log->info('bibid : ' . $match[1]);
 }
 
 function get_pdo()
