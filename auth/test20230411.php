@@ -110,6 +110,9 @@ function test20230411($log_)
     
     $res = get_contents($log_, $url, $option);
     $log_->info($res);
+    
+    $rc = preg_match('/<input type="hidden" name="bibid" value=".+?">/s', $res, $match);
+    $log_->info('bibid : ' . $match[1]);
 }
 
 function get_contents($log_, $url_, $options_ = null)
