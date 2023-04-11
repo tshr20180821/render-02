@@ -51,7 +51,7 @@ __HEREDOC__;
         $option = [CURLOPT_COOKIEJAR => '/tmp/cookie',
                   CURLOPT_COOKIEFILE => '/tmp/cookie',];
 
-        $url = get_env('URL001');
+        $url = get_env('LIB_URL_01');
         $res = get_contents($url, $option);
     }
     
