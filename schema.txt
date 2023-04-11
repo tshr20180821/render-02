@@ -6,7 +6,6 @@ CREATE TABLE m_lib_account (
   CHARSET utf8mb4,
   COLLATE utf8mb4_0900_bin;
 
-
 CREATE TABLE m_magazine_data (
     `title` varchar(128) PRIMARY KEY,
     `bibid_last` varchar(64),
