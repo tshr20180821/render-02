@@ -66,7 +66,7 @@ function test20230411b($log_)
         CURLOPT_COOKIEFILE => '/tmp/cookie',
         CURLOPT_POST => true,
         CURLOPT_POSTFIELDS => http_build_query($post_data),
-        CURLOPT_FOLLOWLOCATION => false,
+        // CURLOPT_FOLLOWLOCATION => false,
         CURLOPT_HEADER => true,
     ];
     
