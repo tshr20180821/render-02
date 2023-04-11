@@ -45,7 +45,7 @@ __HEREDOC__;
     foreach ($results as $row) {
         $log->info('m_magazine_data select result : ' . $row['symbol'] . ' ' . $row['title'] . ' ' . $row['bibid']);
         
-        access_library($pdo_sqlite, $row['symbol'], $row['title'], $row['bibid'])
+        access_library($pdo_sqlite, $row['symbol'], $row['title'], $row['bibid']);
     }
     
     $pdo_sqlite = null;
