@@ -9,13 +9,54 @@ $requesturi = $_SERVER['REQUEST_URI'];
 $time_start = microtime(true);
 $log->info("START ${requesturi}");
 
-test20230411($log);
+test20230411b($log);
 
 $log->info('FINISH ' . substr((microtime(true) - $time_start), 0, 7) . 's');
 
 exit();
 
-function test20230411($log_)
+function test20230411b($log_)
+{
+    $log_->info('BEGIN');
+    
+    $bibid = $_ENV['BIBID001'];
+    
+    $options = [
+        CURLOPT_COOKIEJAR => '/tmp/cookie',
+        CURLOPT_COOKIEFILE => '/tmp/cookie',
+    ];
+    
+    $url = $_ENV['URL004'] . $bibid;
+    $res = get_contents($log_, $url, $options);
+    // $log_->info($res);
+    
+    $rc = preg_match('/<input type="hidden" name="hid_session" value="(.+?)">/', $res, $match);
+    $hid_session = $match[1];
+    $rc = preg_match('/<input type="hidden" name="hid_vottp" value="(.+?)">/', $res, $match);
+    $hid_vottp = $match[1];
+    
+    $post_data = [
+        'hid_session' => $hid_session,
+        'idx' => '',
+        'revidx' => '',
+        'hid_vottp' => $hid_vottp,
+        'bibid' => $bibid,
+        'submit_btn_reserve_basket' => '予約かご',
+    ];
+    
+    $options = [
+        CURLOPT_COOKIEJAR => '/tmp/cookie',
+        CURLOPT_COOKIEFILE => '/tmp/cookie',
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => http_build_query($post_data),
+    ];
+    
+    $url = $_ENV['URL003'];
+    $res = get_contents($log_, $url, $options);
+    $log_->info($res);
+}
+
+function test20230411a($log_)
 {
     $log_->info('BEGIN');
     
@@ -111,7 +152,7 @@ function test20230411($log_)
     $res = get_contents($log_, $url, $option);
     // $log_->info($res);
     
-    $rc = preg_match('/<input type="hidden" name="bibid" value="(.+?)"/s', $res, $match);
+    $rc = preg_match('/<input type="hidden" name="bibid" value="(.+?)"/', $res, $match);
     $log_->info('bibid : ' . $match[1]);
 }
 
