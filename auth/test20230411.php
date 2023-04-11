@@ -91,7 +91,7 @@ function test20230411($log_)
     $log_->info(print_r($matches, true));
     
     foreach ($matches[0] as &$line) {
-        $rc = preg_match('/(<a href="\/winj\/opac\/switch-detail\.do\?idx=\d+).+?>' . $_ENV['WORD01'] . '<+?<\/a>/s', $line, $match);
+        $rc = preg_match('/<a href="\/winj\/opac\/switch-detail\.do\?idx=(\d+).+?>' . $_ENV['WORD01'] . '</s', $line, $match);
         if ($rc === 0) {
             continue;
         }
