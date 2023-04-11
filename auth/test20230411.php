@@ -78,7 +78,7 @@ function test20230411($log_)
               CURLOPT_POSTFIELDS => http_build_query($post_data) . $chk_area,
               ];
     
-    $log_->info(http_build_query($post_data));
+    // $log_->info(http_build_query($post_data));
     
     $url = $_ENV['URL001'];
     $res = get_contents($log_, $url, $option);
@@ -86,7 +86,7 @@ function test20230411($log_)
     
     $rc = preg_match_all('/<a href="\/winj\/opac\/switch-detail\.do\?idx=.+?<\/a>/s', $res, $matches);
     
-    $log_->info(print_r($matches, true));
+    // $log_->info(print_r($matches, true));
     
     $idx = -1;
     foreach ($matches[0] as &$line) {
@@ -109,7 +109,7 @@ function test20230411($log_)
     $url = $_ENV['URL003'];
     
     $res = get_contents($log_, $url, $option);
-    $log_->info($res);
+    // $log_->info($res);
     
     $rc = preg_match('/<input type="hidden" name="bibid" value="(.+?)"/s', $res, $match);
     $log_->info('bibid : ' . $match[1]);
