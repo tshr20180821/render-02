@@ -1,0 +1,26 @@
+CREATE TABLE m_lib_account (
+    `lib_id` varchar(64) PRIMARY KEY,
+    `lib_password` varchar(64) NOT NULL,
+    `symbol` varchar(1) NOT NULL
+) ENGINE InnoDB,
+  CHARSET utf8mb4,
+  COLLATE utf8mb4_0900_bin;
+
+
+CREATE TABLE m_magazine_data (
+    `title` varchar(128) PRIMARY KEY,
+    `bibid_last` varchar(64),
+    `update_datetime` timestamp,
+    `check_datetime` timestamp NOT NULL,
+    `symbol` varchar(1) NOT NULL
+) ENGINE InnoDB,
+  CHARSET utf8mb4,
+  COLLATE utf8mb4_0900_bin;
+
+CREATE TABLE m_env (
+    `key_name` varchar(128) NOT NULL,
+    `value` varchar(512) NOT NULL,
+    PRIMARY KEY (`key_name`)
+) ENGINE InnoDB,
+  CHARSET utf8mb4,
+  COLLATE utf8mb4_0900_bin;
