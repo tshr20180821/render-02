@@ -90,13 +90,24 @@ function test20230411($log_)
     
     $log_->info(print_r($matches, true));
     
+    $idx = -1;
     foreach ($matches[0] as &$line) {
         $rc = preg_match('/<a href="\/winj\/opac\/switch-detail\.do\?idx=(\d+).+?>' . $_ENV['WORD01'] . '</s', $line, $match);
         if ($rc === 0) {
             continue;
         }
         $log_->info(print_r($match, true));
+        $idx = $match[1];
     }
+    
+    $option = [CURLOPT_COOKIEJAR => '/tmp/cookie',
+              CURLOPT_COOKIEFILE => '/tmp/cookie',];
+    
+    $url = $_ENV['URL001'] . "&idx=${idx}";
+    
+    $res = get_contents($log_, $url, $option);
+    $log_->info($res);
+    $log_->info(file_get_contents('/tmp/cookie'));
 }
 
 function get_contents($log_, $url_, $options_ = null)
