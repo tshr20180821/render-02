@@ -66,13 +66,67 @@ function test20230411b($log_)
         CURLOPT_COOKIEFILE => '/tmp/cookie',
         CURLOPT_POST => true,
         CURLOPT_POSTFIELDS => http_build_query($post_data),
-        // CURLOPT_FOLLOWLOCATION => false,
-        CURLOPT_HEADER => true,
     ];
     
     $url = $_ENV['URL005'];
     $res = get_contents($log_, $url, $options);
     $log_->info($res);
+    
+    $rc = preg_match('/<input type="hidden" name="hid_session" value="(.+?)">/', $res, $match);
+    $hid_session = $match[1];
+    $rc = preg_match('/<input type="hidden" name="hid_aplph" value="(.+?)">/', $res, $match);
+    $hid_aplph = $match[1];
+    $rc = preg_match('/<a href="JavaScript:otherWin\(\'(.+?)\'\);">/', $res, $match);
+    $chk_check = $match[1];
+    
+    $post_data = [
+        'hid_session' => $hid_session,
+        'hid_aplph' => $hid_aplph,
+        'chk_check' => $chk_check,
+        'cmb_area' => '09',
+        'cmb_ctttp' => '004',
+        'chk_limit' => 'on',
+        'submit_btn_reservation' => '通常予約',
+    ];
+    
+    $options = [
+        CURLOPT_COOKIEJAR => '/tmp/cookie',
+        CURLOPT_COOKIEFILE => '/tmp/cookie',
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => http_build_query($post_data),
+    ];
+    
+    $url = $_ENV['URL006'];
+    $res = get_contents($log_, $url, $options);
+    $log_->info($res);
+    
+    $rc = preg_match('/<input type="hidden" name="hid_session" value="(.+?)">/', $res, $match);
+    $hid_session = $match[1];
+    $rc = preg_match('/<input type="hidden" name="hid_aplph" value="(.+?)">/', $res, $match);
+    $hid_aplph = $match[1];
+    $rc = preg_match('/<select name="cmb_email" id="cmb_email" title=".+?"><option value="(.+?)" selected="selected">/', $res, $match);
+    $cmb_email = $match[1];
+    $rc = preg_match('/<span class="title">(.+?)<\/span>/s', $res, $match);
+    $title = $match[1];
+    
+    $post_data = [
+        'hid_session' => $hid_session,
+        'hid_aplph' => $hid_aplph,
+        'cmb_email' => $cmb_email,
+        'submit_btn_confirm' => '予約',
+    ];
+    
+    $options = [
+        CURLOPT_COOKIEJAR => '/tmp/cookie',
+        CURLOPT_COOKIEFILE => '/tmp/cookie',
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => http_build_query($post_data),
+    ];
+    
+    $url = $_ENV['URL007'];
+    $res = get_contents($log_, $url, $options);
+    $log_->info($res);
+    $log_->info($title);
 }
 
 function test20230411a($log_)
