@@ -54,6 +54,25 @@ function test20230411b($log_)
     $url = $_ENV['URL003'];
     $res = get_contents($log_, $url, $options);
     $log_->info($res);
+    
+    $post_data = [
+        'txt_usercd' => $_ENV['USER01'],
+        'txt_password' => $_ENV['PASSWORD01'],
+        'submit_btn_login' => 'ログイン',
+    ];
+    
+    $options = [
+        CURLOPT_COOKIEJAR => '/tmp/cookie',
+        CURLOPT_COOKIEFILE => '/tmp/cookie',
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => http_build_query($post_data),
+        CURLOPT_FOLLOWLOCATION => false,
+        CURLOPT_HEADER => true,
+    ];
+    
+    $url = $_ENV['URL005'];
+    $res = get_contents($log_, $url, $options);
+    $log_->info($res);
 }
 
 function test20230411a($log_)
