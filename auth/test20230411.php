@@ -69,18 +69,27 @@ function test20230411($log_)
         'submit_btn_searchDetailSelAr' => '検索',
     ];
     
+    $chk_area = '';
+    for ($i = 0; $i < 13; $i++) {
+        $chk_area .= '&chk_area=' . str_pad($i + 1, 2, '0', STR_PAD_LEFT);
+    }
     $option = [CURLOPT_COOKIEJAR => '/tmp/cookie',
               CURLOPT_COOKIEFILE => '/tmp/cookie',
               CURLOPT_POST => true,
-              CURLOPT_POSTFIELDS => http_build_query($post_data) . '&chk_area=01&chk_area=02&chk_area=03&chk_area=04&chk_area=05&chk_area=06&chk_area=07&chk_area=08&chk_area=09&chk_area=10&chk_area=11&chk_area=12&chk_area=13',
+              CURLOPT_POSTFIELDS => http_build_query($post_data) . $chk_area;
               ];
     
     $log_->info(http_build_query($post_data));
     
-    $url = $_ENV['URL002'];
+    $url = $_ENV['URL001'];
     $res = get_contents($log_, $url, $option);
     $log_->info($res);
     $log_->info(file_get_contents('/tmp/cookie'));
+    
+    // <a href="/winj/opac/switch-detail.do?idx=
+    $rc = preg_match_all('/<a href="\/winj\/opac\/switch-detail\.do\?idx=.+?<\/a>/s', $res, $matches);
+    
+    $log_->info(print_r($matches, true));
 }
 
 function get_contents($log_, $url_, $options_ = null)
