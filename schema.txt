@@ -9,7 +9,7 @@ CREATE TABLE m_lib_account (
 CREATE TABLE m_magazine_data (
     `symbol` varchar(1) NOT NULL,
     `title` varchar(128) NOT NULL,
-    `bibid_last` varchar(64),
+    `bibid` varchar(64),
     `reserve` int,
     `update_datetime` timestamp,
     `check_datetime` timestamp NOT NULL,
