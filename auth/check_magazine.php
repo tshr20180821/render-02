@@ -186,7 +186,7 @@ __HEREDOC__;
     
     $pdo = get_pdo();
     
-    $statement_update = $pdo_sqlite_->prepare($sql_update);
+    $statement_update = $pdo->prepare($sql_update);
     $rc = $statement_update->execute([
         ':b_bibid' => $bibid,
         ':b_symbol' => $symbol_,
