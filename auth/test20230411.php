@@ -83,13 +83,20 @@ function test20230411($log_)
     
     $url = $_ENV['URL001'];
     $res = get_contents($log_, $url, $option);
-    $log_->info($res);
+    // $log_->info($res);
     $log_->info(file_get_contents('/tmp/cookie'));
     
-    // <a href="/winj/opac/switch-detail.do?idx=
     $rc = preg_match_all('/<a href="\/winj\/opac\/switch-detail\.do\?idx=.+?<\/a>/s', $res, $matches);
     
     $log_->info(print_r($matches, true));
+    
+    foreach ($matches[0] as &$line) {
+        $rc = preg_match('/(<a href="\/winj\/opac\/switch-detail\.do\?idx=\d+).+?>' . $_ENV['WORD01'] . '<+?<\/a>/s', $line, $match);
+        if ($rc === 0) {
+            continue;
+        }
+        $log_->info(print_r($match, true));
+    }
 }
 
 function get_contents($log_, $url_, $options_ = null)
