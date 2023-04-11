@@ -25,7 +25,6 @@ function test20230411($log_)
     $url = $_ENV['URL001'];
     $res = get_contents($log_, $url, $option);
     // $log_->info($res);
-    $log_->info(file_get_contents('/tmp/cookie'));
     
     $post_data = [
         'cmb_column1' => 'title',
@@ -84,7 +83,6 @@ function test20230411($log_)
     $url = $_ENV['URL001'];
     $res = get_contents($log_, $url, $option);
     // $log_->info($res);
-    $log_->info(file_get_contents('/tmp/cookie'));
     
     $rc = preg_match_all('/<a href="\/winj\/opac\/switch-detail\.do\?idx=.+?<\/a>/s', $res, $matches);
     
@@ -106,8 +104,12 @@ function test20230411($log_)
     $url = $_ENV['URL002'] . $idx;
     
     $res = get_contents($log_, $url, $option);
+    // $log_->info($res);
+    
+    $url = $_ENV['URL003'];
+    
+    $res = get_contents($log_, $url, $option);
     $log_->info($res);
-    $log_->info(file_get_contents('/tmp/cookie'));
 }
 
 function get_contents($log_, $url_, $options_ = null)
