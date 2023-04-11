@@ -2,6 +2,13 @@ FROM php:8.2-apache
 
 WORKDIR /usr/src/app
 
+RUN apt-get update \
+ && apt-get install -y \
+  libsqlite3-0 \
+ && docker-php-ext-install -j$(nproc) pdo_mysql mysqli mbstring \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+ 
 COPY ./php.ini ${PHP_INI_DIR}/
 
 RUN a2dissite -q 000-default.conf
