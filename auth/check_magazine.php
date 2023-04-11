@@ -370,7 +370,7 @@ __HEREDOC__;
 
     $statement_select = $pdo_sqlite->prepare($sql_select);
     $rc = $statement_select->execute([
-        ':b_key_name' => $key_name_],
+        ':b_key_name' => $key_name_,
     ]);
     $results = $statement_select->fetchAll();
     
