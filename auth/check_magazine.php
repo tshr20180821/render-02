@@ -130,7 +130,7 @@ function access_library($pdo_sqlite_, $symbol_, $title_, $bibid_last_)
         if ($rc === 0) {
             continue;
         }
-        $log_->info(print_r($match, true));
+        $log->info(print_r($match, true));
         $idx = $match[1];
     }
     
