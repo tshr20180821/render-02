@@ -144,7 +144,56 @@ function access_library($pdo_sqlite_, $symbol_, $title_, $bibid_last_)
     $res = get_contents(get_env('LIB_URL_03'), $options);
     
     $rc = preg_match('/<input type="hidden" name="bibid" value="(.+?)"/', $res, $match);
-    $log->info('bibid : ' . $match[1]);
+    $bibid = $match[1];
+    $log->info('bibid : ' . $bibid);
+    
+    $reserve = 0;
+    if ($bibid != $bibid_last_) {
+        $reserve = 1;
+    }
+    
+    $sql_update = <<< __HEREDOC__
+UPDATE m_magazine_data
+   SET bibid = :b_bibid
+      ,reserve = :b_reserve
+      ,check_datetime = :b_check_datetime
+ WHERE symbol = :b_symbol
+   AND title = :b_title
+__HEREDOC__;
+    
+    $statement_update = $pdo_sqlite_->prepare($sql_update);
+    $rc = $statement_update->execute([
+        ':b_bibid' => $bibid,
+        ':b_reserve' => $reserve,
+        ':b_check_datetime' => date('YmdHis'),
+        ':b_symbol' => $symbol_,
+        ':b_title' => $title_,
+    ]);
+    
+    if ($reserve == 0) {
+        return;
+    }
+    
+    $sql_update = <<< __HEREDOC__
+UPDATE m_magazine_data
+   SET bibid = :b_bibid
+      ,reserve = 1
+      ,check_datetime = NOW
+      ,check_datetime = NOW
+ WHERE symbol = :b_symbol
+   AND title = :b_title
+__HEREDOC__;
+    
+    $pdo = get_pdo();
+    
+    $statement_update = $pdo_sqlite_->prepare($sql_update);
+    $rc = $statement_update->execute([
+        ':b_bibid' => $bibid,
+        ':b_symbol' => $symbol_,
+        ':b_title' => $title_,
+    ]);
+    
+    $pdo = null;
 }
 
 function get_pdo()
@@ -154,7 +203,7 @@ function get_pdo()
     
     $dsn = "mysql:host={$_ENV['DB_HOST']};dbname={$_ENV['DB_NAME']}";
     $options = array(
-      PDO::MYSQL_ATTR_SSL_CA => '/etc/ssl/certs/ca-certificates.crt',
+        PDO::MYSQL_ATTR_SSL_CA => '/etc/ssl/certs/ca-certificates.crt',
     );
     return new PDO($dsn, $_ENV['DB_USER'], $_ENV['DB_PASSWORD'], $options);
 }
@@ -320,8 +369,9 @@ SELECT M1.value
 __HEREDOC__;
 
     $statement_select = $pdo_sqlite->prepare($sql_select);
-    $statement_select->bindValue(':b_key_name', $key_name_);
-    $rc = $statement_select->execute();
+    $rc = $statement_select->execute([
+        ':b_key_name' => $key_name_],
+    ]);
     $results = $statement_select->fetchAll();
     
     $value = '';
