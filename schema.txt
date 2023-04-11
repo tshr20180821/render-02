@@ -7,19 +7,20 @@ CREATE TABLE m_lib_account (
   COLLATE utf8mb4_0900_bin;
 
 CREATE TABLE m_magazine_data (
-    `title` varchar(128) PRIMARY KEY,
+    `symbol` varchar(1) NOT NULL,
+    `title` varchar(128) NOT NULL,
     `bibid_last` varchar(64),
+    `reserve` int,
     `update_datetime` timestamp,
     `check_datetime` timestamp NOT NULL,
-    `symbol` varchar(1) NOT NULL
+    PRIMARY KEY (`symbol`,`title`)
 ) ENGINE InnoDB,
   CHARSET utf8mb4,
   COLLATE utf8mb4_0900_bin;
 
 CREATE TABLE m_env (
-    `key_name` varchar(128) NOT NULL,
-    `value` varchar(512) NOT NULL,
-    PRIMARY KEY (`key_name`)
+    `key_name` varchar(128) PRIMARY KEY,
+    `value` varchar(512) NOT NULL
 ) ENGINE InnoDB,
   CHARSET utf8mb4,
   COLLATE utf8mb4_0900_bin;
