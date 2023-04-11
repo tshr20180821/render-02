@@ -4,6 +4,7 @@ WORKDIR /usr/src/app
 
 RUN apt-get update \
  && apt-get install -y \
+  libonig-dev \
   libsqlite3-0 \
  && docker-php-ext-install -j$(nproc) pdo_mysql mysqli mbstring \
  && apt-get clean \
