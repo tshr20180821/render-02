@@ -180,7 +180,7 @@ __HEREDOC__;
 UPDATE m_magazine_data
    SET bibid = :b_bibid
       ,reserve = 1
-      ,check_datetime = NOW
+      ,update_datetime = NOW
       ,check_datetime = NOW
  WHERE symbol = :b_symbol
    AND title = :b_title
