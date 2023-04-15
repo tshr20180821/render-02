@@ -61,7 +61,7 @@ __HEREDOC__;
         $results = $statement_select->fetchAll();
 
         foreach ($results as $row) {
-            $record .= "${reserve} ${title} ${check_datetime}\r\n";
+            $record .= $row['reserve'] . ' ' .  $row['title'] . ' ' .  $row['check_datetime'] . "\r\n";
         }
         $pdo = null;
     }
