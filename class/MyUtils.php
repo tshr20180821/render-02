@@ -11,8 +11,7 @@ class MyUtils
 
         $options = [
             CURLOPT_URL => $url_,
-            // CURLOPT_USERAGENT => $_ENV['USERAGENT'],
-            CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:111.0) Gecko/20100101 Firefox/111.0',
+            CURLOPT_USERAGENT => $_ENV['USERAGENT'],
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_FOLLOWLOCATION => true,
