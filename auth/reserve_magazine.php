@@ -178,7 +178,7 @@ __HEREDOC__;
     $sql_update = <<< __HEREDOC__
 UPDATE m_magazine_data
    SET reserve = :b_reserve
-      ,update_datetime = NOW
+      ,update_datetime = ADDTIME(NOW(), '9:0')
  WHERE symbol = :b_symbol
    AND title = :b_title
 __HEREDOC__;
