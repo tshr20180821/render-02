@@ -55,9 +55,10 @@ function access_library2($pdo_sqlite_, $symbol_, $title_, $bibid_, $lib_id_, $li
     global $log;
     $log->info('BEGIN');
     
+    @unlink('/tmp/cookie2')
     $options = [
-        CURLOPT_COOKIEJAR => '/tmp/cookie',
-        CURLOPT_COOKIEFILE => '/tmp/cookie',
+        CURLOPT_COOKIEJAR => '/tmp/cookie2',
+        CURLOPT_COOKIEFILE => '/tmp/cookie2',
     ];
     
     $res = $mu->get_contents($mu->get_env('LIB_URL_04') . $bibid_, $options);
@@ -77,8 +78,8 @@ function access_library2($pdo_sqlite_, $symbol_, $title_, $bibid_, $lib_id_, $li
     ];
     
     $options = [
-        CURLOPT_COOKIEJAR => '/tmp/cookie',
-        CURLOPT_COOKIEFILE => '/tmp/cookie',
+        CURLOPT_COOKIEJAR => '/tmp/cookie2',
+        CURLOPT_COOKIEFILE => '/tmp/cookie2',
         CURLOPT_POST => true,
         CURLOPT_POSTFIELDS => http_build_query($post_data),
     ];
@@ -92,8 +93,8 @@ function access_library2($pdo_sqlite_, $symbol_, $title_, $bibid_, $lib_id_, $li
     ];
     
     $options = [
-        CURLOPT_COOKIEJAR => '/tmp/cookie',
-        CURLOPT_COOKIEFILE => '/tmp/cookie',
+        CURLOPT_COOKIEJAR => '/tmp/cookie2',
+        CURLOPT_COOKIEFILE => '/tmp/cookie2',
         CURLOPT_POST => true,
         CURLOPT_POSTFIELDS => http_build_query($post_data),
     ];
@@ -118,8 +119,8 @@ function access_library2($pdo_sqlite_, $symbol_, $title_, $bibid_, $lib_id_, $li
     ];
     
     $options = [
-        CURLOPT_COOKIEJAR => '/tmp/cookie',
-        CURLOPT_COOKIEFILE => '/tmp/cookie',
+        CURLOPT_COOKIEJAR => '/tmp/cookie2',
+        CURLOPT_COOKIEFILE => '/tmp/cookie2',
         CURLOPT_POST => true,
         CURLOPT_POSTFIELDS => http_build_query($post_data),
     ];
@@ -144,8 +145,8 @@ function access_library2($pdo_sqlite_, $symbol_, $title_, $bibid_, $lib_id_, $li
     ];
     
     $options = [
-        CURLOPT_COOKIEJAR => '/tmp/cookie',
-        CURLOPT_COOKIEFILE => '/tmp/cookie',
+        CURLOPT_COOKIEJAR => '/tmp/cookie2',
+        CURLOPT_COOKIEFILE => '/tmp/cookie2',
         CURLOPT_POST => true,
         CURLOPT_POSTFIELDS => http_build_query($post_data),
     ];
