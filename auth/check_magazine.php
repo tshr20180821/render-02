@@ -43,10 +43,14 @@ __HEREDOC__;
     $rc = $statement_select->execute();
     $results = $statement_select->fetchAll();
     
+    $time_loop_start = time();
     foreach ($results as $row) {
         $log->info('m_magazine_data select result : ' . $row['symbol'] . ' ' . $row['title'] . ' ' . $row['bibid']);
         
         access_library($pdo_sqlite, $row['symbol'], $row['title'], $row['bibid']);
+        if ((time() - $time_loop_start) > 20) {
+            break;
+        }
     }
     
     $pdo_sqlite = null;
