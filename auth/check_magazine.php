@@ -122,7 +122,7 @@ function access_library($pdo_sqlite_, $symbol_, $title_, $bibid_last_)
         CURLOPT_POSTFIELDS => http_build_query($post_data) . $chk_area,
     ];
     
-    $res = $mu->get_contents(get_env('LIB_URL_01'), $options);
+    $res = $mu->get_contents($mu->get_env('LIB_URL_01'), $options);
     
     $rc = preg_match_all('/<a href="\/winj\/opac\/switch-detail\.do\?idx=.+?<\/a>/s', $res, $matches);
     
@@ -141,9 +141,9 @@ function access_library($pdo_sqlite_, $symbol_, $title_, $bibid_last_)
         CURLOPT_COOKIEFILE => $cookie,
     ];
     
-    $res = $mu->get_contents(get_env('LIB_URL_02') . $idx, $options);
+    $res = $mu->get_contents($mu->get_env('LIB_URL_02') . $idx, $options);
     
-    $res = $mu->get_contents(get_env('LIB_URL_03'), $options);
+    $res = $mu->get_contents($mu->get_env('LIB_URL_03'), $options);
     
     $rc = preg_match('/<input type="hidden" name="bibid" value="(.+?)"/', $res, $match);
     $bibid = $match[1];
