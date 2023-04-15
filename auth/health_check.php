@@ -56,7 +56,7 @@ __HEREDOC__;
     if (file_exists('/tmp/sqlite.db')) {
         $pdo = new PDO('sqlite:/tmp/sqlite.db');
         
-        $statement_select = $pdo_sqlite->prepare($sql_select);
+        $statement_select = $pdo->prepare($sql_select);
         $rc = $statement_select->execute();
         $results = $statement_select->fetchAll();
 
