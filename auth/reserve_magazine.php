@@ -72,7 +72,7 @@ function access_library2($pdo_sqlite_, $symbol_, $title_, $bibid_, $lib_id_, $li
         'idx' => '',
         'revidx' => '',
         'hid_vottp' => $hid_vottp,
-        'bibid' => $bibid,
+        'bibid' => $bibid_,
         'submit_btn_reserve_basket' => '予約かご',
     ];
     
