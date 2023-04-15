@@ -124,9 +124,7 @@ function access_library($pdo_sqlite_, $symbol_, $title_, $bibid_last_)
     
     $res = $mu->get_contents($mu->get_env('LIB_URL_01'), $options);
     $log->warn($res);
-    
-    return;
-    
+        
     $rc = preg_match_all('/<a href="\/winj\/opac\/switch-detail\.do\?idx=.+?<\/a>/s', $res, $matches);
     
     $idx = -1;
@@ -144,8 +142,9 @@ function access_library($pdo_sqlite_, $symbol_, $title_, $bibid_last_)
         CURLOPT_COOKIEFILE => $cookie,
     ];
     
-    $res = $mu->get_contents($mu->get_env('LIB_URL_02') . $idx, $options);
-    $log->warn($res);
+    if ($idx != -1) {
+        $res = $mu->get_contents($mu->get_env('LIB_URL_02') . $idx, $options);
+    }
     
     $res = $mu->get_contents($mu->get_env('LIB_URL_03'), $options);
     
