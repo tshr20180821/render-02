@@ -22,7 +22,7 @@ function check_magazine()
     $log->info('BEGIN');
     
     clearstatcache();
-    if (!file_exists('/tmp/m_env.db')) {
+    if (!file_exists('/tmp/sqlite.db')) {
         init_sqlite();
     }
     
@@ -37,7 +37,7 @@ SELECT M1.symbol
  ORDER BY M1.check_datetime
 __HEREDOC__;
     
-    $pdo_sqlite = new PDO('sqlite:/tmp/m_magazine_data.db');
+    $pdo_sqlite = new PDO('sqlite:/tmp/sqlite.db');
     
     $statement_select = $pdo_sqlite->prepare($sql_select);
     $rc = $statement_select->execute();
@@ -204,7 +204,7 @@ function init_sqlite()
     global $log;
     $log->info('BEGIN');
     
-    $pdo_sqlite = new PDO('sqlite:/tmp/m_env.db');
+    $pdo_sqlite = new PDO('sqlite:/tmp/sqlite.db');
     
     $log->info('SQLite Version : ' . $pdo_sqlite->query('SELECT sqlite_version()')->fetchColumn());
     
@@ -250,7 +250,7 @@ __HEREDOC__;
     $pdo = null;
     $pdo_sqlite = null;
     
-    $pdo_sqlite = new PDO('sqlite:/tmp/m_lib_account.db');
+    $pdo_sqlite = new PDO('sqlite:/tmp/sqlite.db');
     
     $sql_create = <<< __HEREDOC__
 CREATE TABLE m_lib_account (
@@ -295,7 +295,7 @@ __HEREDOC__;
     $pdo = null;
     $pdo_sqlite = null;
     
-    $pdo_sqlite = new PDO('sqlite:/tmp/m_magazine_data.db');
+    $pdo_sqlite = new PDO('sqlite:/tmp/sqlite.db');
     
     $sql_create = <<< __HEREDOC__
 CREATE TABLE m_magazine_data (
