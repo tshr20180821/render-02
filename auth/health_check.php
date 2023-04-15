@@ -25,7 +25,7 @@ function health_check()
     $atom = <<< __HEREDOC__
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
- <title>Health Check</title>
+ <title>Health Check __FQDN__</title>
  <link href="http://example.org/"/>
  <updated>2022-01-01T00:00:00Z</updated>
  <author>
