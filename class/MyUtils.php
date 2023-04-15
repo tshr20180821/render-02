@@ -1,5 +1,7 @@
 <?php
 
+include('/usr/src/app/log.php');
+
 class MyUtils
 {
     $log = new Log();
