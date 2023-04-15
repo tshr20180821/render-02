@@ -23,7 +23,7 @@ RUN mkdir -p /var/www/html/auth
 COPY .htpasswd /var/www/html/
 RUN chmod 644 /var/www/html/.htpasswd
 
-COPY ./class/log.php /usr/src/app/
+COPY ./class/*.php /usr/src/app/
 COPY ./index.html /var/www/html/
 COPY ./auth/*.php /var/www/html/auth/
 
