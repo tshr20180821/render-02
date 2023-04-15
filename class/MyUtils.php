@@ -4,7 +4,11 @@ include('/usr/src/app/log.php');
 
 class MyUtils
 {
-    private $log = new Log();
+    private $log;
+    
+    function __construct() {
+        $log = new Log();
+    }
     
     public function get_contents($url_, $options_ = null)
     {
