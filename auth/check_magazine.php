@@ -1,15 +1,16 @@
 <?php
 
 include('/usr/src/app/log.php');
+include('/usr/src/app/MyUtils.php');
 
 $log = new Log();
+$mu = new MyUtils();
 
-$pid = getmypid();
 $requesturi = $_SERVER['REQUEST_URI'];
 $time_start = microtime(true);
 $log->info("START ${requesturi}");
 
-check_magazine($log);
+check_magazine();
 
 $log->info('FINISH ' . substr((microtime(true) - $time_start), 0, 7) . 's');
 
@@ -53,6 +54,7 @@ __HEREDOC__;
 
 function access_library($pdo_sqlite_, $symbol_, $title_, $bibid_last_)
 {
+    global $mu;
     global $log;
     $log->info('BEGIN');
 
@@ -65,7 +67,7 @@ function access_library($pdo_sqlite_, $symbol_, $title_, $bibid_last_)
         CURLOPT_COOKIEFILE => $cookie,
     ];
 
-    $res = get_contents(get_env('LIB_URL_01'), $options);
+    $res = $mu->get_contents($mu->get_env('LIB_URL_01'), $options);
     
     $post_data = [
         'cmb_column1' => 'title',
@@ -120,7 +122,7 @@ function access_library($pdo_sqlite_, $symbol_, $title_, $bibid_last_)
         CURLOPT_POSTFIELDS => http_build_query($post_data) . $chk_area,
     ];
     
-    $res = get_contents(get_env('LIB_URL_01'), $options);
+    $res = $mu->get_contents(get_env('LIB_URL_01'), $options);
     
     $rc = preg_match_all('/<a href="\/winj\/opac\/switch-detail\.do\?idx=.+?<\/a>/s', $res, $matches);
     
@@ -139,9 +141,9 @@ function access_library($pdo_sqlite_, $symbol_, $title_, $bibid_last_)
         CURLOPT_COOKIEFILE => $cookie,
     ];
     
-    $res = get_contents(get_env('LIB_URL_02') . $idx, $options);
+    $res = $mu->get_contents(get_env('LIB_URL_02') . $idx, $options);
     
-    $res = get_contents(get_env('LIB_URL_03'), $options);
+    $res = $mu->get_contents(get_env('LIB_URL_03'), $options);
     
     $rc = preg_match('/<input type="hidden" name="bibid" value="(.+?)"/', $res, $match);
     $bibid = $match[1];
@@ -184,7 +186,7 @@ UPDATE m_magazine_data
    AND title = :b_title
 __HEREDOC__;
     
-    $pdo = get_pdo();
+    $pdo = $mu->get_pdo();
     
     $statement_update = $pdo->prepare($sql_update);
     $rc = $statement_update->execute([
@@ -196,20 +198,9 @@ __HEREDOC__;
     $pdo = null;
 }
 
-function get_pdo()
-{
-    global $log;
-    $log->info('BEGIN');
-    
-    $dsn = "mysql:host={$_ENV['DB_HOST']};dbname={$_ENV['DB_NAME']}";
-    $options = array(
-        PDO::MYSQL_ATTR_SSL_CA => '/etc/ssl/certs/ca-certificates.crt',
-    );
-    return new PDO($dsn, $_ENV['DB_USER'], $_ENV['DB_PASSWORD'], $options);
-}
-
 function init_sqlite()
 {
+    global $mu;
     global $log;
     $log->info('BEGIN');
     
@@ -233,7 +224,7 @@ __HEREDOC__;
 
     $statement_insert = $pdo_sqlite->prepare($sql_insert);
 
-    $pdo = get_pdo();
+    $pdo = $mu->get_pdo();
     
     $log->info('MySQL Version : ' . $pdo->query('SELECT version()')->fetchColumn());
     
@@ -278,7 +269,7 @@ __HEREDOC__;
 
     $statement_insert = $pdo_sqlite->prepare($sql_insert);
 
-    $pdo = get_pdo();
+    $pdo = $mu->get_pdo();
     
     $sql_select = <<< __HEREDOC__
 SELECT M1.lib_id
@@ -325,7 +316,7 @@ __HEREDOC__;
 
     $statement_insert = $pdo_sqlite->prepare($sql_insert);
 
-    $pdo = get_pdo();
+    $pdo = $mu->get_pdo();
     
     $sql_select = <<< __HEREDOC__
 SELECT M1.symbol
@@ -353,88 +344,4 @@ __HEREDOC__;
 
     $pdo = null;
     $pdo_sqlite = null;
-}
-
-function get_env($key_name_)
-{
-    global $log;
-    $log->info('BEGIN');
-    
-    $pdo_sqlite = new PDO('sqlite:/tmp/m_env.db');
-    
-    $sql_select = <<< __HEREDOC__
-SELECT M1.value
-  FROM m_env M1
- WHERE M1.key_name = :b_key_name
-__HEREDOC__;
-
-    $statement_select = $pdo_sqlite->prepare($sql_select);
-    $rc = $statement_select->execute([
-        ':b_key_name' => $key_name_,
-    ]);
-    $results = $statement_select->fetchAll();
-    
-    $value = '';
-    foreach ($results as $row) {
-        $value = $row['value'];
-    }
-    
-    $pdo_sqlite = null;
-    
-    return $value;
-}
-
-function get_contents($url_, $options_ = null)
-{
-    global $log;
-    $log->info("URL : ${url_}");
-
-    $options = [
-        CURLOPT_URL => $url_,
-        // CURLOPT_USERAGENT => getenv('USER_AGENT'),
-        CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:111.0) Gecko/20100101 Firefox/111.0',
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_MAXREDIRS => 3,
-        CURLOPT_PATH_AS_IS => true,
-        CURLOPT_TCP_FASTOPEN => true,
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2TLS,
-        CURLOPT_TIMEOUT => 25,
-    ];
-
-    if (is_null($options_) === false && array_key_exists(CURLOPT_USERAGENT, $options_)) {
-        unset($options[CURLOPT_USERAGENT]);
-    }
-
-    $time_start = 0;
-    $time_finish = 0;
-    $time_start = microtime(true);
-    $ch = curl_init();
-    foreach ($options as $key => $value) {
-        $rc = curl_setopt($ch, $key, $value);
-        if ($rc == false) {
-            $log->info("curl_setopt : ${key} ${value}");
-        }
-    }
-    if (is_null($options_) === false) {
-        foreach ($options_ as $key => $value) {
-            $rc = curl_setopt($ch, $key, $value);
-            if ($rc == false) {
-                $log->info("curl_setopt : ${key} ${value}");
-            }
-        }
-    }
-    $res = curl_exec($ch);
-    $time_finish = microtime(true);
-    $http_code = (string)curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $log->info("HTTP STATUS CODE : ${http_code} [" .
-                substr(($time_finish - $time_start), 0, 5) . 'sec] ' .
-                parse_url($url_, PHP_URL_HOST) .
-                ' [' . number_format(strlen($res)) . 'byte]'
-               );
-    curl_close($ch);
-
-    return $res;
 }
