@@ -51,7 +51,7 @@ SELECT M1.title
          ,M1.check_datetime
 __HEREDOC__;
     
-    $record = '';
+    $record = "\r\n";
     clearstatcache();
     if (file_exists('/tmp/sqlite.db')) {
         $pdo = new PDO('sqlite:/tmp/sqlite.db');
