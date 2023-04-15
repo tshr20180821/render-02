@@ -17,7 +17,8 @@ RUN a2enmod -q authz_groupfile
 
 COPY ./apache.conf /etc/apache2/sites-enabled/
 
-RUN mkdir -p /var/www/html/auth
+RUN mkdir -p /var/www/html/auth \
+ && mkdir -p /var/www/html/phpmyadmin
 
 # basic auth
 COPY .htpasswd /var/www/html/
