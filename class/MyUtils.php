@@ -63,7 +63,7 @@ class MyUtils
         global $log;
         $log->info('BEGIN');
 
-        $pdo_sqlite = new PDO('sqlite:/tmp/m_env.db');
+        $pdo_sqlite = new PDO('sqlite:/tmp/sqlite.db');
 
         $sql_select = <<< __HEREDOC__
 SELECT M1.value
