@@ -146,6 +146,9 @@ function access_library($pdo_sqlite_, $symbol_, $title_, $bibid_last_)
     $res = $mu->get_contents($mu->get_env('LIB_URL_03'), $options);
     
     $rc = preg_match('/<input type="hidden" name="bibid" value="(.+?)"/', $res, $match);
+    if ($rc !== 1) {
+        $log->warn($res);
+    }
     $bibid = $match[1];
     $log->info('bibid : ' . $bibid);
     
