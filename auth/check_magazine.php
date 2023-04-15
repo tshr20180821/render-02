@@ -155,6 +155,10 @@ function access_library($pdo_sqlite_, $symbol_, $title_, $bibid_last_)
     $bibid = $match[1];
     $log->info('bibid : ' . $bibid);
     
+    if ($bibid == '') {
+        return;
+    }
+    
     $reserve = 0;
     if ($bibid != $bibid_last_) {
         $reserve = 1;
