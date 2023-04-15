@@ -98,20 +98,4 @@ __HEREDOC__;
         );
         return new PDO($dsn, $_ENV['DB_USER'], $_ENV['DB_PASSWORD'], $options);
     }
-
-    public function send_slack_message($message_)
-    {
-        global $log;
-        $log->info('BEGIN');
-
-        $slack_access_token = $this->get_env('SLACK_ACCESS_TOKEN', true);
-        $slack_channel = $this->get_env('SLACK_CHANNEL', true);
-
-        if ($slack_access_token != '') {
-            $url = 'https://slack.com/api/chat.postMessage'
-                . "?token=${slack_access_token}&channel=${slack_channel}"
-                . '&text=' . urlencode($message_);
-            $res = $this->get_contents($url);
-        }
-    }
 }
