@@ -34,7 +34,7 @@ SELECT M1.symbol
  ORDER BY M1.check_datetime
 __HEREDOC__;
     
-    $pdo_sqlite = new PDO('sqlite:/tmp/m_magazine_data.db');
+    $pdo_sqlite = new PDO('sqlite:/tmp/sqlite.db');
     
     $statement_select = $pdo_sqlite->prepare($sql_select);
     $rc = $statement_select->execute();
