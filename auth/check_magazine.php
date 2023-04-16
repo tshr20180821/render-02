@@ -177,7 +177,7 @@ __HEREDOC__;
     $rc = $statement_update->execute([
         ':b_bibid' => $bibid,
         ':b_reserve' => $reserve,
-        ':b_check_datetime' => date('YmdHis'),
+        ':b_check_datetime' => date('Y/m/d H:i:s'),
         ':b_symbol' => $symbol_,
         ':b_title' => $title_,
     ]);
