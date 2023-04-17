@@ -104,4 +104,45 @@ __HEREDOC__;
         );
         return new PDO($dsn, $_ENV['DB_USER'], $_ENV['DB_PASSWORD'], $options);
     }
+    
+    public function send_mail($subject_, $body_, $cc_ = null)
+    {
+        global $log;
+        $log->info('BEGIN');
+
+        $user_address = $this->get_env('SMTP_USERNAME', true);
+
+        $mail = new PHPMailer(true);
+        try {
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+            $mail->Debugoutput = function($str_, $level_) {
+                $log->info('PHPMailer log : ' . trim($str_));
+            };
+
+            $mail->isSMTP();
+            $mail->Host = $this->get_env('SMTP_SERVER', true);
+            $mail->SMTPAuth = true;
+            $mail->Username = $user_address;
+            $mail->Password = $this->get_env('SMTP_PASSWORD', true);
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            $mail->Port = 465;
+
+            $mail->setFrom($user_address);
+            $mail->addAddress($user_address);
+            if ($cc_ != null) {
+                $mail->addCC($cc_);
+            }
+
+            $mail->isHTML(false);
+            $mail->Encoding = '7bit';
+            $mail->CharSet = 'iso-2022-jp';
+
+            $mail->Subject = mb_encode_mimeheader($subject_, 'iso-2022-jp');
+            $mail->Body = mb_convert_encoding($body_, 'iso-2022-jp', 'utf-8');
+
+            $mail->send();
+        } catch (Exception $e) {
+            $log->warn('ERROR : ' . $mail->ErrorInfo);
+        }
+    }
 }
