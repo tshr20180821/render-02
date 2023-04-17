@@ -1,6 +1,5 @@
 <?php
 
-// include('/usr/src/app/log.php');
 include('/usr/src/app/MyUtils.php');
 
 $log = new Log();
