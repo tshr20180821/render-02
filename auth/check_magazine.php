@@ -62,7 +62,7 @@ function access_library($pdo_sqlite_, $symbol_, $title_, $bibid_last_)
     global $log;
     $log->info('BEGIN');
 
-    $cookie = '/tmp/cookie';
+    $cookie = '/tmp/cookie' . basename(__FILE__);
     clearstatcache();
     @unlink($cookie);
     
