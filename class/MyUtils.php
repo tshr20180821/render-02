@@ -110,7 +110,7 @@ __HEREDOC__;
         global $log;
         $log->info('BEGIN');
 
-        $user_address = $this->get_env('SMTP_USERNAME', true);
+        $user_address = $this->get_env('SMTP_USERNAME');
 
         $mail = new PHPMailer(true);
         try {
@@ -120,10 +120,10 @@ __HEREDOC__;
             };
 
             $mail->isSMTP();
-            $mail->Host = $this->get_env('SMTP_SERVER', true);
+            $mail->Host = $this->get_env('SMTP_SERVER');
             $mail->SMTPAuth = true;
             $mail->Username = $user_address;
-            $mail->Password = $this->get_env('SMTP_PASSWORD', true);
+            $mail->Password = $this->get_env('SMTP_PASSWORD');
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
             $mail->Port = 465;
 
