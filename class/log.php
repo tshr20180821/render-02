@@ -60,7 +60,7 @@ class Log
         $mt = explode('.', microtime(true));
         $mili_sec = '000';
         if (count($mt) == 2) {
-            $mili_sec = substr(explode('.', $mt)[1] . '000' , 0, 3);
+            $mili_sec = substr($mt[1] . '000' , 0, 3);
         }
         $log_datetime = date('Y-m-d H:i:s.') . $mili_sec;
         $log_header = $_ENV['DEPLOY_DATETIME'] . ' ' . trim(getmypid() . " ${level} ${file} ${line}");
