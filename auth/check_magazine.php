@@ -220,7 +220,8 @@ function init_sqlite()
     $sql_create = <<< __HEREDOC__
 CREATE TABLE m_env (
  key_name TEXT,
- value TEXT
+ value TEXT,
+ encrypt INTEGER
 )
 __HEREDOC__;
 
@@ -228,7 +229,7 @@ __HEREDOC__;
     $log->info('m_env create table result : ' . $rc);
     
     $sql_insert = <<< __HEREDOC__
-INSERT INTO m_env VALUES(:b_key_name, :b_value)
+INSERT INTO m_env VALUES(:b_key_name, :b_value, :b_encrypt)
 __HEREDOC__;
 
     $statement_insert = $pdo_sqlite->prepare($sql_insert);
@@ -240,6 +241,7 @@ __HEREDOC__;
     $sql_select = <<< __HEREDOC__
 SELECT M1.key_name
       ,M1.value
+      ,M1.encrypt
   FROM m_env M1
  ORDER BY M1.key_name
 __HEREDOC__;
@@ -252,6 +254,7 @@ __HEREDOC__;
         $statement_insert->execute([
             ':b_key_name' => $row['key_name'],
             ':b_value' => $row['value'],
+            ':b_encrypt' => $row['encrypt'],
         ]);
         $log->info('m_env insert result : ' . $statement_insert->rowCount() . ' ' . $row['key_name']);
     }
