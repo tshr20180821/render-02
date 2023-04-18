@@ -20,20 +20,24 @@ function test20230418()
     global $log;
     $log->info('BEGIN');
     
-    $sql_select = <<< __HEREDOC__
+    $sql_select[] = <<< __HEREDOC__
 SELECT M1.title
       ,M1.reserve
       ,M1.check_datetime
   FROM m_magazine_data M1
  WHERE M1.reserve = 0
    AND M1.check_datetime = ''
- UNION ALL
+__HEREDOC__;
+    
+    $sql_select[] = <<< __HEREDOC__
 SELECT M1.title
       ,M1.reserve
       ,M1.check_datetime
   FROM m_magazine_data M1
  WHERE M1.reserve <> 0
- UNION ALL
+__HEREDOC__;
+    
+    $sql_select[] = <<< __HEREDOC__
 SELECT M1.title
       ,M1.reserve
       ,MIN(M1.check_datetime)
@@ -46,12 +50,14 @@ __HEREDOC__;
     
     $pdo = new PDO('sqlite:/tmp/sqlite.db');
 
-    $statement_select = $pdo->prepare($sql_select);
-    $rc = $statement_select->execute();
-    $results = $statement_select->fetchAll();
+    for ($i = 0; $i < 3; $i++) {
+        $statement_select = $pdo->prepare($sql_select[$i]);
+        $rc = $statement_select->execute();
+        $results = $statement_select->fetchAll();
 
-    foreach ($results as $row) {
-        $log->debug($row['reserve'] . ' ' .  $row['title'] . ' ' .  $row['check_datetime']);
+        foreach ($results as $row) {
+            $log->debug($i . ' ' . $row['reserve'] . ' ' .  $row['title'] . ' ' .  $row['check_datetime']);
+        }
     }
     
     $pdo = null;
