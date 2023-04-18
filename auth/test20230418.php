@@ -40,7 +40,7 @@ __HEREDOC__;
     $sql_select[] = <<< __HEREDOC__
 SELECT M1.title
       ,M1.reserve
-      ,MIN(M1.check_datetime)
+      ,MIN(M1.check_datetime) check_datetime
   FROM m_magazine_data M1
  WHERE M1.reserve = 0
    AND M1.check_datetime <> ''
