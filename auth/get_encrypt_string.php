@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $s = $mu->get_encrypt_string($_POST['original']);
     $log->warn($s);
     header("Content-Type: text/plain");
-    echo $s;
+    echo $mu->get_decrypt_string($s);
 } else {
     echo $html;
 }
