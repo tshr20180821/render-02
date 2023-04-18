@@ -113,7 +113,7 @@ __HEREDOC__;
         $pdo_sqlite = null;
 
         if ($encrypt == 1) {
-            $value = $shis->get_decrypt_string($value);
+            $value = $this->get_decrypt_string($value);
         }
         return $value;
     }
