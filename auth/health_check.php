@@ -58,12 +58,16 @@ SELECT M1.title
  UNION ALL
 SELECT M1.title
       ,M1.reserve
-      ,MIN(M1.check_datetime)
+      ,M1.check_datetime
   FROM m_magazine_data M1
+ INNER JOIN ( SELECT MIN(M2.check_datetime) check_datetime
+                FROM m_magazine_data M2
+               WHERE M2.reserve = 0
+                 AND M2.check_datetime <> ''
+            ) Q1
+    ON Q1.check_datetime = M1.check_datetime
  WHERE M1.reserve = 0
    AND M1.check_datetime <> ''
- GROUP BY M1.check_datetime
- HAVING M1.check_datetime = MIN(M1.check_datetime)
 __HEREDOC__;
     
     $record = "\r\n";
