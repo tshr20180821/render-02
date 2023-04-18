@@ -47,8 +47,23 @@ SELECT M1.title
       ,M1.reserve
       ,M1.check_datetime
   FROM m_magazine_data M1
- ORDER BY M1.reserve DESC
-         ,M1.check_datetime
+ WHERE M1.reserve = 0
+   AND M1.check_datetime = ''
+ UNION ALL
+SELECT M1.title
+      ,M1.reserve
+      ,M1.check_datetime
+  FROM m_magazine_data M1
+ WHERE M1.reserve <> 0
+ UNION ALL
+SELECT M1.title
+      ,M1.reserve
+      ,MIN(M1.check_datetime)
+  FROM m_magazine_data M1
+ WHERE M1.reserve = 0
+   AND M1.check_datetime <> ''
+ GROUP BY M1.check_datetime
+ HAVING M1.check_datetime = MIN(M1.check_datetime)
 __HEREDOC__;
     
     $record = "\r\n";
