@@ -92,6 +92,7 @@ class MyUtils
 
         $sql_select = <<< __HEREDOC__
 SELECT M1.value
+      ,M1.encrypt
   FROM m_env M1
  WHERE M1.key_name = :b_key_name
 __HEREDOC__;
@@ -103,12 +104,17 @@ __HEREDOC__;
         $results = $statement_select->fetchAll();
 
         $value = '';
+        $encrypt = 0;
         foreach ($results as $row) {
             $value = $row['value'];
+            $encrypt = $row['encrypt'];
         }
 
         $pdo_sqlite = null;
 
+        if ($encrypt == 1) {
+            $value = $shis->get_decrypt_string($value);
+        }
         return $value;
     }
     
