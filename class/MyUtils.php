@@ -63,6 +63,25 @@ class MyUtils
 
         return $res;
     }
+
+    public function get_decrypt_string($encrypt_base64_string_)
+    {
+        global $log;
+        $log->info('BEGIN');
+
+        list($iv,  $encrypt_base64_string) = explode(':', $encrypt_base64_string_);
+        return openssl_decrypt($encrypt_base64_string, $_ENV['CIPHER'], $_ENV['ENCRYPT_KEY'], 0, base64_decode($iv));
+    }
+
+    public function get_encrypt_string($original_string_)
+    {
+        global $log;
+        $log->info('BEGIN');
+
+        $cipher = $_ENV['CIPHER'];
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipher));
+        return base64_encode($iv) . ':' . openssl_encrypt($original_string_, $cipher, $_ENV['ENCRYPT_KEY'], 0, $iv);;
+    }
     
     public function get_env($key_name_)
     {
