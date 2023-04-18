@@ -19,7 +19,10 @@ $html = <<< __HEREDOC__
 __HEREDOC__;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $log->warn($mu->get_encrypt_string($_POST['original']));
+    $s = $mu->get_encrypt_string($_POST['original']);
+    $log->warn($s);
+    header("Content-Type: text/plain");
+    echo $s;
 } else {
     echo $html;
 }
