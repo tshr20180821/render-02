@@ -17,6 +17,7 @@ exit();
 
 function reserve_magazine()
 {
+    global $mu;
     global $log;
     $log->info('BEGIN');
     
@@ -42,7 +43,7 @@ __HEREDOC__;
     foreach ($results as $row) {
         $log->info('m_magazine_data select result : ' . $row['symbol'] . ' ' . $row['title'] . ' ' . $row['bibid']);
         
-        access_library2($pdo_sqlite, $row['symbol'], $row['title'], $row['bibid'], $row['lib_id'], $row['lib_password']);
+        access_library2($pdo_sqlite, $row['symbol'], $row['title'], $row['bibid'], $row['lib_id'], $mu->decrypt_string($row['lib_password']));
     }
     
     $pdo_sqlite = null;
