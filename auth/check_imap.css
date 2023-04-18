@@ -1,0 +1,40 @@
+body {
+  zoom: 80%;
+}
+.button_1 {
+  background-color: #ffffff;
+  border-style: none;
+  color: #0000ff;
+  font-size: 1em;
+  cursor: pointer;
+}
+.button_2 {
+  background-color: #00ff00;
+  border-style: none;
+  color: #0000ff;
+  font-size: 1em;
+  cursor: pointer;
+}
+.button_3 {
+  height: 15px;
+  width: 60px;
+  cursor: pointer;
+}
+.div_1 {
+  line-height: 0.5em;
+}
+.form_1 {
+  display: inline;
+}
+.span_1 {
+  font-weight: bold;
+  color: #006400;
+}
+.span_2 {
+  font-weight: bold;
+}
+.span_3 {
+  font-size: small;
+  font-weight: bold;
+  color: #0000ff;
+}
