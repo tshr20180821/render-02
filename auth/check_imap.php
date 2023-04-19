@@ -127,6 +127,24 @@ __HEREDOC__;
     $message_no_max = imap_num_msg($imap);
     $log->info("mail count : ${message_no_max}");
     
+    $file_name_mail_count = '/tmp/mail/MAIL_COUNT';
+    clearstatcache();
+    if (file_exists($file_name_mail_count)) {
+        $message_no_max_previous = (int)file_get_contents($file_name_mail_count);
+        if ($message_no_max_previous != $message_no_max) {
+            /*
+            $res = $mu_->send_slack_message(':envelope_with_arrow: MAIL COUNT CHANGED. '
+                                            . number_format($message_no_max) . ' +' . ($message_no_max - $message_no_max_previous));
+            */
+        } else if (file_get_contents('/tmp/mail/previous_range') == $no_range) {
+            imap_close($imap);
+            $html = file_get_contents('/tmp/mail/previous_html');
+            $html = str_replace('__UPDATE_TIME__', date('H:i'), $html);
+            echo $html;
+            return;
+        }
+    }
+
     $start_no = -1;
     $finish_no = -1;
     
@@ -381,7 +399,16 @@ __HEREDOC__;
     $html = str_replace('__MARK_MAIL_ADDRESS__', $mark_mail_address, $html);
     $html = str_replace('__IMAP_SERVER__', $imap_server, $html);
     $html = str_replace('__BODY_CONTENTS__', $body_contents, $html);
+    if ($is_refresh == true) {
+        file_put_contents('/tmp/mail/previous_html', $html);
+        file_put_contents('/tmp/mail/previous_range', $no_range);
+    }
     $html = str_replace('__UPDATE_TIME__', date('H:i'), $html);
+    
+    if ($is_refresh == false) {
+        file_put_contents('/tmp/mail/' . $no_range, $html);
+        file_put_contents('/tmp/mail/AUTHORIZATION', hash('sha512', $user) . '-' . hash('sha512', $password) . '-' . hash('sha512', $mark_mail_address));
+    }
     
     echo $html;
 }
@@ -453,9 +480,7 @@ function init_sqlite()
     $log->info('BEGIN');
 
     $pdo = new PDO('sqlite:/tmp/t_mail_cache.db');
-    
-    $log->info('SQLite Version : ' . $pdo->query('SELECT sqlite_version()')->fetchColumn());
-    
+
     $sql_create = <<< __HEREDOC__
 CREATE TABLE t_mail_cache (
     message_no INTEGER PRIMARY KEY,
