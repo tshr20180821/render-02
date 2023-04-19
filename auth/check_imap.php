@@ -42,6 +42,7 @@ function check_imap()
 <input type="password" name="password" style="ime-mode: disabled;">
 <input type="text" name="no_range" style="ime-mode: disabled;">
 <input type="password" name="mark_mail_address" style="ime-mode: disabled;">
+<input type="text" name="imap_server" style="ime-mode: disabled;">
 <input type="submit"> 
 </form>
 </body></html>
@@ -109,6 +110,7 @@ window.onload = function() {
 <input type="hidden" name="password" value="__PASSWORD__">
 <input type="hidden" name="no_range" value="__NO_RANGE__">
 <input type="hidden" name="mark_mail_address" value="__MARK_MAIL_ADDRESS__">
+<input type="hidden" name="imap_server" value="__IMAP_SERVER__">
 <input type="submit" value="Manual Retry">
 </form>
 <div>Auto Retry...</div>
@@ -116,6 +118,8 @@ window.onload = function() {
 </body>
 </html>
 __HEREDOC__;
+    
+    $imap_server = $_POST['imap_server'];
     
     $line = "curl -m 10 -u ${user}:${password} ${imap_server} -X 'EXAMINE INBOX'" . ' | grep -o -E "[0-9]+ EXISTS"';
     $res = $mu->cmd_execute($line);
@@ -126,6 +130,7 @@ __HEREDOC__;
         $html = str_replace('__USER__', $user, $html);
         $html = str_replace('__PASSWORD__', $password, $html);
         $html = str_replace('__MARK_MAIL_ADDRESS__', $mark_mail_address, $html);
+        $html = str_replace('__IMAP_SERVER__', $imap_server, $html);
         $html = str_replace('__UPDATE_TIME__', date('H:i'), $html);
         
         echo $html;
@@ -133,7 +138,7 @@ __HEREDOC__;
     }
     
     $log->info('START imap_open');
-    $imap = imap_open('{imap.mail.yahoo.co.jp:993/ssl}', $user, $password);
+    $imap = imap_open('{' . $imap_server . '/ssl}', $user, $password);
     $log->info(print_r($imap, true));
     $log->info('FINISH imap_open');
     
@@ -322,6 +327,7 @@ function toggle_display() {
 <input type="text" name="password" value="__PASSWORD__">
 <input type="text" name="no_range" value="__NO_RANGE__">
 <input type="text" name="mark_mail_address" value="__MARK_MAIL_ADDRESS__">
+<input type="text" name="imap_server" value="__IMAP_SERVER__">
 <input type="submit">
 </form>
 </span>
@@ -360,6 +366,7 @@ __HEREDOC__;
             . '<input type="hidden" name="password" value="' . $password . '">'
             . '<input type="hidden" name="no_range" value="' . ($start_no - 100 < 1 ? 0 : $start_no - 100) . '-' . $start_no . '">'
             . '<input type="hidden" name="mark_mail_address" value="' . $mark_mail_address . '">'
+            . '<input type="hidden" name="imap_server" value="' . $imap_server . '">'
             . '<input class="button_1" type="submit" value="PRE100"></form></div>' . "\n";
     
     // new 50
@@ -369,6 +376,7 @@ __HEREDOC__;
             . '<input type="hidden" name="password" value="' . $password . '">'
             . '<input type="hidden" name="no_range" value="' . ($message_no_max - $message_no_max % 10) . '-' . ($message_no_max - $message_no_max % 10 + 50) . '">'
             . '<input type="hidden" name="mark_mail_address" value="' . $mark_mail_address . '">'
+            . '<input type="hidden" name="imap_server" value="' . $imap_server . '">'
             . '<input class="__BUTTON_CLASS__" type="submit" value="NEW50"></form></div>' . "\n";
     
     // refresh
@@ -402,6 +410,7 @@ __HEREDOC__;
     $html = str_replace('__USER__', $user, $html);
     $html = str_replace('__PASSWORD__', $password, $html);
     $html = str_replace('__MARK_MAIL_ADDRESS__', $mark_mail_address, $html);
+    $html = str_replace('__IMAP_SERVER__', $imap_server, $html);
     $html = str_replace('__BODY_CONTENTS__', $body_contents, $html);
     if ($is_refresh == true) {
         file_put_contents('/tmp/mail/previous_html', $html);
