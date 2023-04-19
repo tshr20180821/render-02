@@ -10,6 +10,38 @@ class MyUtils
         $log = new Log();
     }
     
+    public function cmd_execute($line_)
+    {
+        global $log;
+        $log->info("URL : ${url_}");
+
+        $time_start = microtime(true);
+        exec($line_, $res);
+        $time_finish = microtime(true);
+        $this->logging_object($res);
+        $log->info('Process Time : ' . substr(($time_finish - $time_start), 0, 7) . 's');
+        return $res;
+    }
+    
+    public function logging_object($obj_)
+    {
+        global $log;
+        
+        if (is_null($obj_)) {
+            $log->info('(NULL)');
+        } else if (is_array($obj_) || is_object($obj_)) {
+            $res = explode("\n", print_r($obj_, true));
+            foreach ($res as $one_line) {
+                $log->info($one_line);
+            }
+        } else if (is_string($obj_)) {
+            $res = explode("\n", $obj_);
+            foreach ($res as $one_line) {
+                $log->info($one_line);
+            }
+        }
+    }
+    
     public function get_contents($url_, $options_ = null)
     {
         global $log;
