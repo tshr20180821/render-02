@@ -130,7 +130,7 @@ function access_library2($pdo_sqlite_, $symbol_, $title_, $bibid_, $lib_id_, $li
     ];
     
     $res = $mu->get_contents($mu->get_env('LIB_URL_06'), $options);
-    $log->warn($res);
+    // $log->warn($res);
     
     $rc = preg_match('/<input type="hidden" name="hid_session" value="(.+?)">/', $res, $match);
     $hid_session = $match[1];
