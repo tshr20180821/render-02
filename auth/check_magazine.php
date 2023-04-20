@@ -161,6 +161,7 @@ function access_library($pdo_sqlite_, $symbol_, $title_, $bibid_last_)
     $reserve = 0;
     if ($bibid != $bibid_last_) {
         $reserve = 1;
+        $mu->send_slack_message('変更有り ' . $title_);
     }
     
     $sql_update = <<< __HEREDOC__
