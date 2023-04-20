@@ -25,6 +25,14 @@ function check_magazine()
         init_sqlite();
     }
     
+    $pdo_sqlite = new PDO('sqlite:/tmp/sqlite.db');
+    
+    if ($pdo_sqlite->query("SELECT COUNT('X') FROM sqlite_master WHERE TYPE='table' AND name='m_magazine_data'")->fetchColumn()) == '0') {
+        init_sqlite();
+    }
+    
+    $pdo_sqlite = null;
+    
     $sql_select = <<< __HEREDOC__
 SELECT M1.symbol
       ,M1.title
