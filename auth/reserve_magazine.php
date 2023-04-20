@@ -42,8 +42,7 @@ __HEREDOC__;
     
     foreach ($results as $row) {
         $log->info('m_magazine_data select result : ' . $row['symbol'] . ' ' . $row['title'] . ' ' . $row['bibid']);
-        $log->warn($mu->decrypt_string($row['lib_password']));
-        access_library2($pdo_sqlite, $row['symbol'], $row['title'], $row['bibid'], $row['lib_id'], $mu->decrypt_string($row['lib_password']));
+        access_library2($pdo_sqlite, $row['symbol'], $row['title'], $row['bibid'], $row['lib_id'], $mu->get_decrypt_string($row['lib_password']));
     }
     
     $pdo_sqlite = null;
