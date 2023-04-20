@@ -202,4 +202,26 @@ __HEREDOC__;
             $log->warn('ERROR : ' . $mail->ErrorInfo);
         }
     }
+    
+    public function send_slack_message($message_)
+    {
+        global $log;
+        $log->info('BEGIN');
+
+        $slack_access_token = $this->get_env('SLACK_ACCESS_TOKEN');
+
+        if ($slack_access_token != '') {
+            foreach ([$this->get_env('SLACK_CHANNEL_01'), $this->get_env('SLACK_CHANNEL_02')] as &$channel) {
+                $options = [
+                    CURLOPT_POST => true,
+                    CURLOPT_POSTFIELDS => json_encode(['text' => $message_, 'channel' => $channel]),
+                    CURLOPT_HTTPHEADER => ["Authorization: Bearer ${slack_access_token}", 'Content-type: application/json'],
+                ];
+                $url = 'https://slack.com/api/chat.postMessage';
+                $res = $this->get_contents($url, $options);
+                $this->logging_object(json_decode($res, true));
+                sleep(1);
+            }
+        }
+    }
 }
