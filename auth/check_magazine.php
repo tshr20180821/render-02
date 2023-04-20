@@ -27,7 +27,7 @@ function check_magazine()
     
     $pdo_sqlite = new PDO('sqlite:/tmp/sqlite.db');
     
-    if ($pdo_sqlite->query("SELECT COUNT('X') FROM sqlite_master WHERE TYPE='table' AND name='m_magazine_data'")->fetchColumn()) == '0') {
+    if ($pdo_sqlite->query("SELECT COUNT('X') FROM sqlite_master WHERE TYPE='table' AND name='m_magazine_data'")->fetchColumn() == '0') {
         init_sqlite();
     }
     
