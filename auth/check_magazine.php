@@ -66,7 +66,7 @@ SELECT COUNT('X')
  WHERE M1.reserve = 1
 __HEREDOC__;
     
-    if ($pdo_sqlite->query($sql_select)->fetchColumn() != '0') {
+    if ($pdo_sqlite->query($sql_select)->fetchColumn() != 0) {
         $cmd = 'curl -u ' . $_ENV['BASIC_USER'] . ':' . $_ENV['BASIC_PASSWORD'] . ' https://' . $_ENV['RENDER_EXTERNAL_HOSTNAME'] . '/auth/reserve_magazine.php';
         $mu->cmd_execute($cmd);
     }
