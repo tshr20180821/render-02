@@ -60,6 +60,17 @@ __HEREDOC__;
         }
     }
     
+    $sql_select = <<< __HEREDOC__
+SELECT COUNT('X')
+  FROM m_magazine_data M1
+ WHERE M1.reserve = 1
+__HEREDOC__;
+    
+    if ($pdo_sqlite->query($sql_select)->fetchColumn() != '0') {
+        $cmd = 'curl -u ' . $_ENV['BASIC_USER'] . ':' . $_ENV['BASIC_PASSWORD'] . ' https://' . $_ENV['RENDER_EXTERNAL_HOSTNAME'] . '/auth/reserve_magazine.php';
+        $mu->cmd_execute($cmd);
+    }
+
     $pdo_sqlite = null;
 }
 
@@ -163,6 +174,7 @@ function access_library($pdo_sqlite_, $symbol_, $title_, $bibid_last_)
     $log->info('bibid : ' . $bibid);
     
     if ($bibid == '') {
+        $log->warn("bibid not found : ${title_}");
         return;
     }
     
