@@ -70,7 +70,9 @@ __HEREDOC__;
     $log->debug("rc : ${rc}");
     if ($rc != 0) {
         $cmd = 'curl -u ' . $_ENV['BASIC_USER'] . ':' . $_ENV['BASIC_PASSWORD'] . ' https://' . $_ENV['RENDER_EXTERNAL_HOSTNAME'] . '/auth/reserve_magazine.php';
-        $mu->cmd_execute($cmd);
+        $log->debug($cmd);
+        $res = $mu->cmd_execute($cmd);
+        $log->debug($res);
     }
 
     $pdo_sqlite = null;
