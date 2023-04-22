@@ -68,7 +68,7 @@ __HEREDOC__;
     
     if ($pdo_sqlite->query($sql_select)->fetchColumn() != 0) {
         $options = [
-            CURLOPT_USERPWD => $_ENV['BASIC_USER'] . ':' . $_ENV['BASIC_PASSWORD'];
+            CURLOPT_USERPWD => $_ENV['BASIC_USER'] . ':' . $_ENV['BASIC_PASSWORD'],
         ];
         $mu->get_contents('https://' . $_ENV['RENDER_EXTERNAL_HOSTNAME'] . '/auth/reserve_magazine.php', $options);
     }
