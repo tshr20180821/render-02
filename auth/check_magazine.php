@@ -66,13 +66,11 @@ SELECT COUNT('X')
  WHERE M1.reserve = 1
 __HEREDOC__;
     
-    $rc = $pdo_sqlite->query($sql_select)->fetchColumn();
-    $log->debug("rc : ${rc}");
-    if ($rc != 0) {
-        $cmd = 'curl -u ' . $_ENV['BASIC_USER'] . ':' . $_ENV['BASIC_PASSWORD'] . ' https://' . $_ENV['RENDER_EXTERNAL_HOSTNAME'] . '/auth/reserve_magazine.php';
-        $log->debug($cmd);
-        $res = $mu->cmd_execute($cmd);
-        $log->debug($res);
+    if ($pdo_sqlite->query($sql_select)->fetchColumn() != 0) {
+        $options = [
+            CURLOPT_USERPWD => $_ENV['BASIC_USER'] . ':' . $_ENV['BASIC_PASSWORD'];
+        ];
+        $mu->get_contents('https://' . $_ENV['RENDER_EXTERNAL_HOSTNAME'] . '/auth/reserve_magazine.php', $options);
     }
 
     $pdo_sqlite = null;
