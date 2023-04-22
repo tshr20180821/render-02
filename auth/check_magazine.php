@@ -67,9 +67,7 @@ SELECT COUNT('X')
  WHERE M1.reserve = 1
 __HEREDOC__;
     
-    $rc = $pdo_sqlite->query($sql_select)->fetchColumn();
-    $log->debug("rc: ${rc}");
-    if ($rc != 0) {
+    if ($pdo_sqlite->query($sql_select)->fetchColumn() != 0) {
         $options = [
             CURLOPT_USERPWD => $_ENV['BASIC_USER'] . ':' . $_ENV['BASIC_PASSWORD'],
         ];
