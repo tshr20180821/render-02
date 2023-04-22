@@ -17,6 +17,7 @@ exit();
 
 function check_magazine()
 {
+    global $mu;
     global $log;
     $log->info('BEGIN');
     
