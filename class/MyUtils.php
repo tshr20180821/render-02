@@ -13,7 +13,7 @@ class MyUtils
     public function cmd_execute($line_)
     {
         global $log;
-        $log->info("URL : ${url_}");
+        $log->info("EXECUTE : ${line_}");
 
         $time_start = microtime(true);
         exec($line_, $res);
