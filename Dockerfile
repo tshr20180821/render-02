@@ -7,7 +7,7 @@ RUN apt-get update \
   libonig-dev \
   libsqlite3-0 \
  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
- && docker-php-ext-install -j$(nproc)
+ && docker-php-ext-install -j$(nproc) \
   imap \
   mbstring \
   mysqli \
