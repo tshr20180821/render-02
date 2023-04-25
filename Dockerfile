@@ -4,6 +4,7 @@ WORKDIR /usr/src/app
 
 RUN apt-get update \
  && apt-get install -y \
+  libc-client2007e-dev \
   libonig-dev \
   libsqlite3-0 \
  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
