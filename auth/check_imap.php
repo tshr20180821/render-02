@@ -103,7 +103,7 @@ __HEREDOC__;
     $mark_mail_address = $_POST['mark_mail_address'];
     $imap_server = $_POST['imap_server'];
     
-    $line = "curl -m 10 -u ${user}:${password} ${imap_server} -X 'EXAMINE INBOX'" . ' | grep -o -E "[0-9]+ EXISTS"';
+    $line = "curl -m 10 -u ${user}:${password} imaps://${imap_server} -X 'EXAMINE INBOX'" . ' | grep -o -E "[0-9]+ EXISTS"';
     $res = $mu->cmd_execute($line);
     
     if (count($res) == 0) {
