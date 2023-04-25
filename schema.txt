@@ -1,26 +1,35 @@
-CREATE TABLE m_lib_account (
-    `lib_id` varchar(64) PRIMARY KEY,
-    `lib_password` varchar(64) NOT NULL,
-    `symbol` varchar(1) NOT NULL
+CREATE TABLE `m_lib_account` (
+	`lib_id` varchar(64) NOT NULL,
+	`lib_password` varchar(64) NOT NULL,
+	`symbol` varchar(1) NOT NULL,
+	PRIMARY KEY (`lib_id`)
 ) ENGINE InnoDB,
   CHARSET utf8mb4,
   COLLATE utf8mb4_0900_bin;
 
-CREATE TABLE m_magazine_data (
-    `symbol` varchar(1) NOT NULL,
-    `title` varchar(128) NOT NULL,
-    `bibid` varchar(64),
-    `reserve` int,
-    `update_datetime` timestamp,
-    `check_datetime` timestamp NOT NULL,
-    PRIMARY KEY (`symbol`,`title`)
+CREATE TABLE `m_magazine_data` (
+	`symbol` varchar(1) NOT NULL,
+	`title` varchar(128) NOT NULL,
+	`bibid` varchar(64),
+	`reserve` int,
+	`update_datetime` timestamp NULL,
+	`check_datetime` timestamp NOT NULL,
+	PRIMARY KEY (`symbol`, `title`)
 ) ENGINE InnoDB,
   CHARSET utf8mb4,
   COLLATE utf8mb4_0900_bin;
 
-CREATE TABLE m_env (
-    `key_name` varchar(128) PRIMARY KEY,
-    `value` varchar(512) NOT NULL
+CREATE TABLE `m_env` (
+	`key_name` varchar(128) NOT NULL,
+	`value` varchar(512) NOT NULL,
+	`encrypt` int NOT NULL DEFAULT '0',
+	PRIMARY KEY (`key_name`)
+) ENGINE InnoDB,
+  CHARSET utf8mb4,
+  COLLATE utf8mb4_0900_bin;
+
+CREATE TABLE `t_dummy` (
+	`dummy` int
 ) ENGINE InnoDB,
   CHARSET utf8mb4,
   COLLATE utf8mb4_0900_bin;
