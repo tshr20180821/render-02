@@ -119,7 +119,7 @@ __HEREDOC__;
         return;
     }
     
-    $log->info('START imap_open');
+    $log->info('START imap_open ' . '{' . $imap_server . '/ssl}');
     $imap = imap_open('{' . $imap_server . '/ssl}', $user, $password);
     $log->info(print_r($imap, true));
     $log->info('FINISH imap_open');
