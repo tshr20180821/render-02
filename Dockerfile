@@ -2,6 +2,10 @@ FROM php:8.2-apache
 
 WORKDIR /usr/src/app
 
+# libc-client2007e-dev : imap
+# libkrb5-dev : imap
+# libonig-dev : mbstring
+# libsqlite3-0 : php sqlite
 RUN apt-get update \
  && apt-get install -y \
   libc-client2007e-dev \
