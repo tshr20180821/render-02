@@ -207,11 +207,11 @@ __HEREDOC__;
         
         $rc = $statement_select->execute([
             ':b_message_no' => $msg_no,
-            ':b_message_id' => $mu_->get_encrypt_string($message_id),
+            ':b_message_id' => $mu->get_encrypt_string($message_id),
         ]);
         $results = $statement_select->fetchAll();
         if (count($results) == 1) {
-            $body = $mu_->get_decrypt_string($results[0]['body_short']);
+            $body = $mu->get_decrypt_string($results[0]['body_short']);
             $log->info("CACHE HIT ${msg_no}");
         } else {
             $structure = imap_fetchstructure($imap, $i + 1);
@@ -251,9 +251,9 @@ __HEREDOC__;
             
             $rc = $statement_upsert->execute([
                 ':b_message_no' => $msg_no,
-                ':b_message_id' => $mu_->get_encrypt_string($message_id),
-                ':b_body_short' => $mu_->get_encrypt_string($body),
-                ':b_body' => $mu_->get_encrypt_string($body_all),
+                ':b_message_id' => $mu->get_encrypt_string($message_id),
+                ':b_body_short' => $mu->get_encrypt_string($body),
+                ':b_body' => $mu->get_encrypt_string($body_all),
             ]);
             $log->info("UPSERT RESULT : ${rc}");
         }
