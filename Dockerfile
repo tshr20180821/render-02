@@ -40,6 +40,7 @@ RUN chmod 644 /var/www/html/.htpasswd
 COPY ./class/*.php /usr/src/app/
 COPY ./index.html /var/www/html/
 COPY ./auth/*.php /var/www/html/auth/
+COPY ./auth/*.css /var/www/html/auth/
 
 COPY ./start.sh /usr/src/app/
 
