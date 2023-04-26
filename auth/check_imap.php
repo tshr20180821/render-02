@@ -22,6 +22,7 @@ function check_imap()
     $log->info('BEGIN');
     
     clearstatcache();
+    @mkdir('/tmp/mail');
     if (!file_exists('/tmp/t_mail_cache.db')) {
         init_sqlite();
     }
