@@ -6,12 +6,14 @@ WORKDIR /usr/src/app
 # libkrb5-dev : imap
 # libonig-dev : mbstring
 # libsqlite3-0 : php sqlite
+# tzdata : ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 RUN apt-get update \
  && apt-get install -y \
   libc-client2007e-dev \
   libkrb5-dev \
   libonig-dev \
   libsqlite3-0 \
+  tzdata \
  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
  && docker-php-ext-install -j$(nproc) \
   imap \
