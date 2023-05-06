@@ -33,7 +33,7 @@ function health_check()
  </author>
  <id>tag:__FQDN__</id>
  <entry>
-   <title>Health Check __UPDATED__</title>
+   <title>__DEPLOY_DATETIME__</title>
    <link href="http://example.org/"/>
    <id>tag:__ID__</id>
    <updated>__UPDATED__</updated>
@@ -85,6 +85,7 @@ __HEREDOC__;
         $pdo = null;
     }
     
+    $atom = str_replace('__DEPLOY_DATETIME__', $_ENV['DEPLOY_DATETIME'], $atom);
     $atom = str_replace('__ID__', $_ENV['RENDER_EXTERNAL_HOSTNAME'] . '-' . uniqid(), $atom);
     $atom = str_replace('__FQDN__', $_ENV['RENDER_EXTERNAL_HOSTNAME'], $atom);
     $atom = str_replace('__UPDATED__', date('Y-m-d') . 'T' . date('H:i:s') . '+09', $atom);
