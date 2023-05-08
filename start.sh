@@ -2,6 +2,7 @@
 
 set -x
 
+apt-get update
 apt-get -s upgrade | grep upgraded >/tmp/CHECK_APT
 
 # phpMyAdmin
