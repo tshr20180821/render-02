@@ -16,5 +16,13 @@ cat /etc/apache2/sites-enabled/apache.conf
 
 echo ServerName ${RENDER_EXTERNAL_HOSTNAME} >/etc/apache2/sites-enabled/server_name.conf
 
+curl -sS -X POST -H "Authorization: Bearer ${SLACK_TOKEN}" \
+  -d "text=${RENDER_EXTERNAL_HOSTNAME} START ${DEPLOY_DATETIME}" -d "channel=${SLACK_CHANNEL_01}" https://slack.com/api/chat.postMessage >/dev/null
+
+sleep 1s
+
+curl -sS -X POST -H "Authorization: Bearer ${SLACK_TOKEN}" \
+  -d "text=${RENDER_EXTERNAL_HOSTNAME} START ${DEPLOY_DATETIME}" -d "channel=${SLACK_CHANNEL_02}" https://slack.com/api/chat.postMessage >/dev/null
+
 . /etc/apache2/envvars
 exec /usr/sbin/apache2 -DFOREGROUND
