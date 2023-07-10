@@ -6,7 +6,7 @@ apt-get update
 apt-get -y upgrade
 
 # phpMyAdmin
-export BLOWFISH_SECRET=$(cat /dev//urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+export BLOWFISH_SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
 export USER_AGENT=$(curl -sS https://raw.githubusercontent.com/tshr20180821/files/master/useragent.txt)
 export DEPLOY_DATETIME=$(date +'%Y%m%d%H%M%S')
