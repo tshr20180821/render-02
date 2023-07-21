@@ -16,13 +16,21 @@ cat /etc/apache2/sites-enabled/apache.conf
 
 echo ServerName ${RENDER_EXTERNAL_HOSTNAME} >/etc/apache2/sites-enabled/server_name.conf
 
-curl -sS -X POST -H "Authorization: Bearer ${SLACK_TOKEN}" \
-  -d "text=${RENDER_EXTERNAL_HOSTNAME} START ${DEPLOY_DATETIME}" -d "channel=${SLACK_CHANNEL_01}" https://slack.com/api/chat.postMessage >/dev/null
+echo "${RENDER_EXTERNAL_HOSTNAME} START ${DEPLOY_DATETIME}" >VERSION.txt
+echo "Apache" >>VERSION.txt
+apachectl -V | head -n 1 >>VERSION.txt
+echo -e "PHP" >>VERSION.txt
+php --version | head -n 1 >>VERSION.txt
 
-sleep 1s
+VERSION=$(cat VERSION.txt)
+rm VERSION.txt
 
 curl -sS -X POST -H "Authorization: Bearer ${SLACK_TOKEN}" \
-  -d "text=${RENDER_EXTERNAL_HOSTNAME} START ${DEPLOY_DATETIME}" -d "channel=${SLACK_CHANNEL_02}" https://slack.com/api/chat.postMessage >/dev/null
+  -d "text=${VERSION}" -d "channel=${SLACK_CHANNEL_01}" https://slack.com/api/chat.postMessage >/dev/null \
+&& sleep 1s \
+&& curl -sS -X POST -H "Authorization: Bearer ${SLACK_TOKEN}" \
+  -d "text=${VERSION}" -d "channel=${SLACK_CHANNEL_02}" https://slack.com/api/chat.postMessage >/dev/null \
+&& sleep 1s
 
 . /etc/apache2/envvars
 exec /usr/sbin/apache2 -DFOREGROUND
