@@ -37,7 +37,7 @@ function health_check()
    <link href="http://example.org/"/>
    <id>tag:__ID__</id>
    <updated>__UPDATED__</updated>
-   <summary>__FQDN__ m_magazine_data __RECORD__</summary>
+   <summary>__FQDN__ Log Size : __LOG_SIZE__MB __RECORD__</summary>
  </entry>
 </feed>
 __HEREDOC__;
@@ -85,11 +85,17 @@ __HEREDOC__;
         $pdo = null;
     }
     
+    $file_size = 0;
+    if (file_exists('/tmp/sqlitelog.db')) {
+        $file_size = filesize('/tmp/sqlitelog.db') / 1024 / 1024;
+    }
+    
     $atom = str_replace('__DEPLOY_DATETIME__', $_ENV['DEPLOY_DATETIME'], $atom);
     $atom = str_replace('__ID__', $_ENV['RENDER_EXTERNAL_HOSTNAME'] . '-' . uniqid(), $atom);
     $atom = str_replace('__FQDN__', $_ENV['RENDER_EXTERNAL_HOSTNAME'], $atom);
     $atom = str_replace('__UPDATED__', date('Y-m-d') . 'T' . date('H:i:s') . '+09', $atom);
     $atom = str_replace('__RECORD__', $record, $atom);
+    $atom = str_replace('__LOG_SIZE__', number_format($file_size), $atom);
 
     echo $atom;
 }
