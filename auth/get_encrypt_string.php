@@ -7,7 +7,7 @@ $mu = new MyUtils();
 
 $requesturi = $_SERVER['REQUEST_URI'];
 $time_start = microtime(true);
-$log->info("START ${requesturi}");
+$log->info("START {$requesturi}");
 
 $html = <<< __HEREDOC__
 <html><body>
