@@ -7,7 +7,7 @@ $mu = new MyUtils();
 
 $requesturi = $_SERVER['REQUEST_URI'];
 $time_start = microtime(true);
-$log->info("START ${requesturi}");
+$log->info("START {$requesturi}");
 
 check_magazine();
 
@@ -174,10 +174,10 @@ function access_library($pdo_sqlite_, $symbol_, $title_, $bibid_last_)
     
     $rc = preg_match('/<input type="hidden" name="bibid" value="(.+?)"/', $res, $match);
     $bibid = $match[1];
-    $log->info('bibid : ' . $bibid);
+    $log->info("bibid : {$bibid}");
     
     if ($bibid == '') {
-        $log->warn("bibid not found : ${title_}");
+        $log->warn("bibid not found : {$title_}");
         return;
     }
     
