@@ -12,7 +12,7 @@ class MyUtils
     
     public function cmd_execute($line_)
     {
-        $this->log->info("EXECUTE : ${line_}");
+        $this->log->info("EXECUTE : {$line_}");
 
         $time_start = microtime(true);
         exec($line_, $res);
@@ -41,7 +41,7 @@ class MyUtils
     
     public function get_contents($url_, $options_ = null)
     {
-        $this->log->info("URL : ${url_}");
+        $this->log->info("URL : {$url_}");
 
         $options = [
             CURLOPT_URL => $url_,
@@ -68,21 +68,21 @@ class MyUtils
         foreach ($options as $key => $value) {
             $rc = curl_setopt($ch, $key, $value);
             if ($rc == false) {
-                $this->log->info("curl_setopt : ${key} ${value}");
+                $this->log->info("curl_setopt : {$key} {$value}");
             }
         }
         if (is_null($options_) === false) {
             foreach ($options_ as $key => $value) {
                 $rc = curl_setopt($ch, $key, $value);
                 if ($rc == false) {
-                    $this->log->info("curl_setopt : ${key} ${value}");
+                    $this->log->info("curl_setopt : {$key} {$value}");
                 }
             }
         }
         $res = curl_exec($ch);
         $time_finish = microtime(true);
         $http_code = (string)curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $this->log->info("HTTP STATUS CODE : ${http_code} [" .
+        $this->log->info("HTTP STATUS CODE : {$http_code} [" .
                     substr(($time_finish - $time_start), 0, 5) . 'sec] ' .
                     parse_url($url_, PHP_URL_HOST) .
                     ' [' . number_format(strlen($res)) . 'byte]'
@@ -205,7 +205,7 @@ __HEREDOC__;
                 $options = [
                     CURLOPT_POST => true,
                     CURLOPT_POSTFIELDS => json_encode(['text' => $message_, 'channel' => $channel]),
-                    CURLOPT_HTTPHEADER => ["Authorization: Bearer ${slack_access_token}", 'Content-type: application/json'],
+                    CURLOPT_HTTPHEADER => ["Authorization: Bearer {$slack_access_token}", 'Content-type: application/json'],
                 ];
                 $url = 'https://slack.com/api/chat.postMessage';
                 $res = $this->get_contents($url, $options);
