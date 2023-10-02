@@ -7,7 +7,7 @@ $mu = new MyUtils();
 
 $requesturi = $_SERVER['REQUEST_URI'];
 $time_start = microtime(true);
-$log->info("START ${requesturi}");
+$log->info("START {$requesturi}");
 
 reserve_magazine();
 
@@ -54,7 +54,7 @@ function access_library2($pdo_sqlite_, $symbol_, $title_, $bibid_, $lib_id_, $li
     global $log;
     $log->info('BEGIN');
     
-    $mu->send_slack_message("予約開始 ${title_} ${bibid_}");
+    $mu->send_slack_message("予約開始 {$title_} {$bibid_}");
     
     $cookie = '/tmp/cookie' . basename(__FILE__);
     clearstatcache();
@@ -160,10 +160,10 @@ function access_library2($pdo_sqlite_, $symbol_, $title_, $bibid_, $lib_id_, $li
     
     if (strpos($res, '以下のタイトルについて予約を行いました。') === false) {
         $reserve = 2;
-        $mu->send_slack_message("✖ 予約失敗 ${title_} ${bibid_}");
+        $mu->send_slack_message("✖ 予約失敗 {$title_} {$bibid_}");
     } else {
         $reserve = 0;
-        $mu->send_slack_message("予約成功 ${title_} ${bibid_}");
+        $mu->send_slack_message("予約成功 {$title_} {$bibid_}");
     }
     
     $sql_update = <<< __HEREDOC__
