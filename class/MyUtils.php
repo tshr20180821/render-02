@@ -4,44 +4,44 @@ include('/usr/src/app/log.php');
 
 class MyUtils
 {
-    private $log;
+    private $_log;
     
     function __construct() {
-        $this->log = new Log();
+        $this->_log = new Log();
     }
     
     public function cmd_execute($line_)
     {
-        $this->log->info("EXECUTE : {$line_}");
+        $this->_log->info("EXECUTE : {$line_}");
 
         $time_start = microtime(true);
         exec($line_, $res);
         $time_finish = microtime(true);
         $this->logging_object($res);
-        $this->log->info('Process Time : ' . substr(($time_finish - $time_start), 0, 7) . 's');
+        $this->_log->info('Process Time : ' . substr(($time_finish - $time_start), 0, 7) . 's');
         return $res;
     }
     
     public function logging_object($obj_)
     {
         if (is_null($obj_)) {
-            $this->log->info('(NULL)');
+            $this->_log->info('(NULL)');
         } else if (is_array($obj_) || is_object($obj_)) {
             $res = explode("\n", print_r($obj_, true));
             foreach ($res as $one_line) {
-                $this->log->info($one_line);
+                $this->_log->info($one_line);
             }
         } else if (is_string($obj_)) {
             $res = explode("\n", $obj_);
             foreach ($res as $one_line) {
-                $this->log->info($one_line);
+                $this->_log->info($one_line);
             }
         }
     }
     
     public function get_contents($url_, $options_ = null)
     {
-        $this->log->info("URL : {$url_}");
+        $this->_log->info("URL : {$url_}");
 
         $options = [
             CURLOPT_URL => $url_,
@@ -68,21 +68,21 @@ class MyUtils
         foreach ($options as $key => $value) {
             $rc = curl_setopt($ch, $key, $value);
             if ($rc == false) {
-                $this->log->info("curl_setopt : {$key} {$value}");
+                $this->_log->info("curl_setopt : {$key} {$value}");
             }
         }
         if (is_null($options_) === false) {
             foreach ($options_ as $key => $value) {
                 $rc = curl_setopt($ch, $key, $value);
                 if ($rc == false) {
-                    $this->log->info("curl_setopt : {$key} {$value}");
+                    $this->_log->info("curl_setopt : {$key} {$value}");
                 }
             }
         }
         $res = curl_exec($ch);
         $time_finish = microtime(true);
         $http_code = (string)curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $this->log->info("HTTP STATUS CODE : {$http_code} [" .
+        $this->_log->info("HTTP STATUS CODE : {$http_code} [" .
                     substr(($time_finish - $time_start), 0, 5) . 'sec] ' .
                     parse_url($url_, PHP_URL_HOST) .
                     ' [' . number_format(strlen($res)) . 'byte]'
@@ -94,7 +94,7 @@ class MyUtils
 
     public function get_decrypt_string($encrypt_base64_string_)
     {
-        $this->log->info('BEGIN');
+        $this->_log->info('BEGIN');
 
         list($iv,  $encrypt_base64_string) = explode(':', $encrypt_base64_string_);
         return openssl_decrypt($encrypt_base64_string, $_ENV['CIPHER'], $_ENV['ENCRYPT_KEY'], 0, base64_decode($iv));
@@ -102,7 +102,7 @@ class MyUtils
 
     public function get_encrypt_string($original_string_)
     {
-        $this->log->info('BEGIN');
+        $this->_log->info('BEGIN');
 
         $cipher = $_ENV['CIPHER'];
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipher));
@@ -111,7 +111,7 @@ class MyUtils
     
     public function get_env($key_name_)
     {
-        $this->log->info('BEGIN');
+        $this->_log->info('BEGIN');
 
         $pdo_sqlite = new PDO('sqlite:/tmp/sqlite.db');
 
@@ -145,7 +145,7 @@ __HEREDOC__;
     
     public function get_pdo()
     {
-        $this->log->info('BEGIN');
+        $this->_log->info('BEGIN');
 
         $dsn = "mysql:host={$_ENV['DB_HOST']};dbname={$_ENV['DB_NAME']}";
         $options = array(
@@ -156,7 +156,7 @@ __HEREDOC__;
     
     public function send_mail($subject_, $body_, $cc_ = null)
     {
-        $this->log->info('BEGIN');
+        $this->_log->info('BEGIN');
 
         $user_address = $this->get_env('SMTP_USERNAME');
 
@@ -164,7 +164,7 @@ __HEREDOC__;
         try {
             $mail->SMTPDebug = SMTP::DEBUG_SERVER;
             $mail->Debugoutput = function($str_, $level_) {
-                $this->log->info('PHPMailer log : ' . trim($str_));
+                $this->_log->info('PHPMailer log : ' . trim($str_));
             };
 
             $mail->isSMTP();
@@ -190,13 +190,13 @@ __HEREDOC__;
 
             $mail->send();
         } catch (Exception $e) {
-            $this->log->warn('ERROR : ' . $mail->ErrorInfo);
+            $this->_log->warn('ERROR : ' . $mail->ErrorInfo);
         }
     }
     
     public function send_slack_message($message_)
     {
-        $this->log->info('BEGIN');
+        $this->_log->info('BEGIN');
 
         $slack_access_token = $this->get_env('SLACK_ACCESS_TOKEN');
 
