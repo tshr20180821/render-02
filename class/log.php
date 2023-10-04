@@ -20,7 +20,7 @@ class Log
              + ' ' + substr($_ENV['DEPLOY_DATETIME'], 8, 2) + ':' + substr($_ENV['DEPLOY_DATETIME'], 10, 2) + ':' + substr($_ENV['DEPLOY_DATETIME'], 12, 2));
 
         $this->_ch = curl_init();
-        curl_setopt($this->_ch, CURLOPT_URL, 'https://logs-01.loggly.com/inputs/' + $_ENV['LOGGLY_TOKEN'] + '/tag/' + $_ENV['RENDER_EXTERNAL_HOSTNAME '] + '/');
+        curl_setopt($this->_ch, CURLOPT_URL, 'https://logs-01.loggly.com/inputs/' + $_ENV['LOGGLY_TOKEN'] + '/tag/' + $_ENV['RENDER_EXTERNAL_HOSTNAME '] + ',' + $_ENV['RENDER_EXTERNAL_HOSTNAME '] + '_' + $_ENV['DEPLOY_DATETIME'] + '/');
         curl_setopt($this->_ch, CURLOPT_POST, 1);
         curl_setopt($this->_ch, CURLOPT_HTTPHEADER, ['Content-Type: text/plain; charset=utf-8',]);
         curl_setopt($this->_ch, CURLOPT_TCP_KEEPALIVE, 1);
