@@ -1,5 +1,7 @@
 FROM php:8.2-apache
 
+ENV PORT 80
+
 WORKDIR /usr/src/app
 
 # libc-client2007e-dev : imap
