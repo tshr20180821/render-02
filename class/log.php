@@ -25,6 +25,7 @@ class Log
         curl_setopt($this->_ch, CURLOPT_POST, 1);
         curl_setopt($this->_ch, CURLOPT_HTTPHEADER, ['Content-Type: text/plain; charset=utf-8',]);
         curl_setopt($this->_ch, CURLOPT_TCP_KEEPALIVE, 1);
+        curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, 1);
 
         clearstatcache();
         if (!file_exists('/tmp/sqlitelog.db')) {
