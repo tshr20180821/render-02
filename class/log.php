@@ -115,7 +115,6 @@ __HEREDOC__;
         $res = curl_exec($this->_ch);
         $http_code = (string)curl_getinfo($this->_ch, CURLINFO_HTTP_CODE);
         if ($level != 'INFO' || time() - $this->_deploy_datetime < 60 * 5 || $http_code != '200') {
-            file_put_contents('php://stderr', $level . ' ' . (time() - $this->_deploy_datetime) . ' ' . $http_code . "\n");
             file_put_contents('php://stderr', "{$log_datetime} \033[0;" . self::COLOR_LIST[$level] . "m{$log_header}\033[0m {$function_chain} {$message_}\n");
         }
         
