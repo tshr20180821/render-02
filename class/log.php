@@ -16,12 +16,12 @@ class Log
     private $_ch; // curl channel
     
     function __construct() {
-        $this->_deploy_datetime = strtotime(substr($_ENV['DEPLOY_DATETIME'], 0, 4) + '/' + substr($_ENV['DEPLOY_DATETIME'], 4, 2) + '/' + substr($_ENV['DEPLOY_DATETIME'], 6, 2)
-             + ' ' + substr($_ENV['DEPLOY_DATETIME'], 8, 2) + ':' + substr($_ENV['DEPLOY_DATETIME'], 10, 2) + ':' + substr($_ENV['DEPLOY_DATETIME'], 12, 2));
+        $this->_deploy_datetime = strtotime(substr($_ENV['DEPLOY_DATETIME'], 0, 4) . '/' . substr($_ENV['DEPLOY_DATETIME'], 4, 2) . '/' . substr($_ENV['DEPLOY_DATETIME'], 6, 2)
+             . ' ' . substr($_ENV['DEPLOY_DATETIME'], 8, 2) . ':' . substr($_ENV['DEPLOY_DATETIME'], 10, 2) . ':' . substr($_ENV['DEPLOY_DATETIME'], 12, 2));
 
         $this->_ch = curl_init();
-        curl_setopt($this->_ch, CURLOPT_URL, 'https://logs-01.loggly.com/inputs/' + $_ENV['LOGGLY_TOKEN']
-                    + '/tag/' + $_ENV['RENDER_EXTERNAL_HOSTNAME '] + ',' + $_ENV['RENDER_EXTERNAL_HOSTNAME '] + '_' + $_ENV['DEPLOY_DATETIME'] + '/');
+        curl_setopt($this->_ch, CURLOPT_URL, 'https://logs-01.loggly.com/inputs/' . $_ENV['LOGGLY_TOKEN']
+                    . '/tag/' . $_ENV['RENDER_EXTERNAL_HOSTNAME'] . ',' . $_ENV['RENDER_EXTERNAL_HOSTNAME'] . '_' . $_ENV['DEPLOY_DATETIME'] . '/');
         curl_setopt($this->_ch, CURLOPT_POST, 1);
         curl_setopt($this->_ch, CURLOPT_HTTPHEADER, ['Content-Type: text/plain; charset=utf-8',]);
         curl_setopt($this->_ch, CURLOPT_TCP_KEEPALIVE, 1);
@@ -57,7 +57,7 @@ __HEREDOC__;
     }
 
     function __destruct() {
-        curl_close($this->ch);
+        curl_close($this->_ch);
     }
 
     public function trace($message_) {
@@ -112,13 +112,12 @@ __HEREDOC__;
         $log_header = $_ENV['DEPLOY_DATETIME'] . ' ' . getmypid() . " {$level} {$file} {$line}";
 
         curl_setopt($this->_ch, CURLOPT_POSTFIELDS, "{$log_datetime} {$log_header} {$function_chain} {$message_}");
-        curl_exec($this->_ch);
+        $res = curl_exec($this->_ch);
         $http_code = (string)curl_getinfo($this->_ch, CURLINFO_HTTP_CODE);
-        // if (strtoupper($value['function']) != 'INFO' || time() - $this->_deploy_datetime < 60 * 5 || $http_code != '200') {
-        //     file_put_contents('php://stderr', "{$log_datetime} \033[0;" . self::COLOR_LIST[$level] . "m{$log_header}\033[0m {$function_chain} {$message_}\n");
-        // }
-        file_put_contents('php://stderr', "{$log_datetime} \033[0;" . self::COLOR_LIST[$level] . "m{$log_header}\033[0m {$function_chain} {$message_}\n");
-
+        if (strtoupper($value['function']) != 'INFO' || time() - $this->_deploy_datetime < 60 * 5 || $http_code != '200') {
+            file_put_contents('php://stderr', "{$log_datetime} \033[0;" . self::COLOR_LIST[$level] . "m{$log_header}\033[0m {$function_chain} {$message_}\n");
+        }
+        
         $this->_statement_insert->execute(
             [':b_pid' => getmypid(),
              ':b_level' => $level,
