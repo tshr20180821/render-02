@@ -27,15 +27,21 @@ class MyUtils
         if (is_null($obj_)) {
             $this->_log->info('(NULL)');
         } else if (is_array($obj_) || is_object($obj_)) {
+            /*
             $res = explode("\n", print_r($obj_, true));
             foreach ($res as $one_line) {
                 $this->_log->info($one_line);
             }
+            */
+            $this->_log->info(print_r($obj_, true));
         } else if (is_string($obj_)) {
+            /*
             $res = explode("\n", $obj_);
             foreach ($res as $one_line) {
                 $this->_log->info($one_line);
             }
+            */
+            $this->_log->info($obj_);
         }
     }
     
