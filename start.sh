@@ -25,6 +25,7 @@ php --version | head -n 1 >>VERSION.txt
 
 VERSION=$(cat VERSION.txt)
 rm VERSION.txt
+rm -f /usr/src/app/*.java
 
 curl -sS -X POST -H "Authorization: Bearer ${SLACK_TOKEN}" \
   -d "text=${VERSION}" -d "channel=${SLACK_CHANNEL_01}" https://slack.com/api/chat.postMessage >/dev/null \
