@@ -36,7 +36,7 @@ public final class LogOperation {
     }
 
     // 1 : record exists / 0 : record none / -1 : error
-    public int execute() {
+    public final int execute() {
         List<Future<Integer>> futures = new ArrayList<>();
 
         int rc = 0;
