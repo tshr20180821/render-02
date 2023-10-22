@@ -13,7 +13,7 @@ class Log
 
     private $_statement_insert; // pdo prepare statement
     private $_deploy_datetime; // unix time
-    private $_ch; // curl channel
+    // private $_ch; // curl channel
     
     function __construct() {
         $this->_deploy_datetime = strtotime(substr($_ENV['DEPLOY_DATETIME'], 0, 4) . '/' . substr($_ENV['DEPLOY_DATETIME'], 4, 2) . '/' . substr($_ENV['DEPLOY_DATETIME'], 6, 2)
