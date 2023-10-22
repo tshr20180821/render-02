@@ -104,10 +104,10 @@ public final class LogglySend implements Callable<Integer> {
             ps.setInt(1, this._seq);
             ps.executeUpdate();
         } catch (SQLException e) {
-            this._logger.warning("SQLException");
+            this._logger.warning("SQLException " + this._seq);
             e.printStackTrace();
         } catch (Exception e) {
-            this._logger.warning("Exception");
+            this._logger.warning("Exception " + this._seq);
             e.printStackTrace();
         } finally {
             try {
