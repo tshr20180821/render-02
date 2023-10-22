@@ -53,6 +53,7 @@ public final class LogOperation {
                 String message = rs.getString("message");
 
                 futures.add(_executorService.submit(new LogglySend(_logger, seq, process_datetime, pid, level, file, line, function, message)));
+                Thread.sleep(10);
                 rc = 1;
             }
         } catch (SQLException e) {
