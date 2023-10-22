@@ -34,7 +34,8 @@ class Log
             $sql_create = <<< __HEREDOC__
 CREATE TABLE t_log (
     seq INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    datetime TIMESTAMP DEFAULT (DATETIME('now','localtime')),
+    regist_datetime TIMESTAMP DEFAULT (DATETIME('now','localtime')),
+    process_datetime TEXT NOT NULL,
     pid TEXT NOT NULL,
     level TEXT NOT NULL,
     file TEXT NOT NULL,
@@ -46,13 +47,15 @@ CREATE TABLE t_log (
 __HEREDOC__;
 
             $rc = $pdo->exec($sql_create);
+
+            exec('cd /usr/src/app && java -classpath .:sqlite-jdbc-3.43.2.0.jar:slf4j-api-2.0.9.jar:slf4j-nop-2.0.9.jar -Duser.timezone=Asia/Tokyo -Dfile.encoding=UTF-8 -verbose:gc LogOperationMain &');
         } else {
             $pdo = new PDO('sqlite:/tmp/sqlitelog.db', NULL, NULL, array(PDO::ATTR_PERSISTENT => TRUE));
         }
 
         $sql_insert = <<< __HEREDOC__
-INSERT INTO t_log (pid, level, file, line, function, message, status)
-  VALUES (:b_pid, :b_level, :b_file, :b_line, :b_function, :b_message, 0);
+INSERT INTO t_log (process_datetime, pid, level, file, line, function, message, status)
+  VALUES (:b_process_datetime, :b_pid, :b_level, :b_file, :b_line, :b_function, :b_message, 0);
 __HEREDOC__;
 
         $this->_statement_insert = $pdo->prepare($sql_insert);
@@ -113,9 +116,11 @@ __HEREDOC__;
         $log_datetime = date('Y-m-d H:i:s.') . $milli_sec;
         $log_header = $_ENV['RENDER_EXTERNAL_HOSTNAME'] . ' ' . $_ENV['DEPLOY_DATETIME'] . ' ' . getmypid() . " {$level} {$file} {$line}";
 
+        /*
         curl_setopt($this->_ch, CURLOPT_POSTFIELDS, "{$log_datetime} {$log_header} {$function_chain} {$message_}");
         curl_exec($this->_ch);
         $http_code = (string)curl_getinfo($this->_ch, CURLINFO_HTTP_CODE);
+        */
         /*
         if ($level != 'INFO' || time() - $this->_deploy_datetime < 60 * 5 || $http_code != '200') {
             file_put_contents('php://stderr', "{$log_datetime} \033[0;" . self::COLOR_LIST[$level] . "m{$log_header}\033[0m {$function_chain} {$message_}\n");
@@ -124,7 +129,8 @@ __HEREDOC__;
         file_put_contents('php://stderr', "{$log_datetime} \033[0;" . self::COLOR_LIST[$level] . "m{$log_header}\033[0m {$function_chain} {$message_}\n");
         
         $this->_statement_insert->execute(
-            [':b_pid' => getmypid(),
+            [':b_process_datetime' => $log_datetime,
+             ':b_pid' => getmypid(),
              ':b_level' => $level,
              ':b_file' => $file,
              ':b_line' => $line,
