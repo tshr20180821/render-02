@@ -9,6 +9,7 @@ WORKDIR /usr/src/app
 # tzdata : ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 RUN apt-get update \
  && apt-get install -y \
+  default-jdk \
   libc-client2007e-dev \
   libkrb5-dev \
   libonig-dev \
