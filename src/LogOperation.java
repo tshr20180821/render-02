@@ -23,7 +23,7 @@ public final class LogOperation {
 
     public static LogOperation getInstance(Logger logger_) {
         _logger = logger_;
-        _executorService = Executors.newFixedThreadPool(8);
+        _executorService = Executors.newFixedThreadPool(2);
         try {
             Class.forName("org.sqlite.JDBC");
             _conn = DriverManager.getConnection("jdbc:sqlite:/tmp/sqlitelog.db");
@@ -53,7 +53,7 @@ public final class LogOperation {
                 String message = rs.getString("message");
 
                 futures.add(_executorService.submit(new LogglySend(_logger, seq, process_datetime, pid, level, file, line, function, message)));
-                Thread.sleep(10);
+                Thread.sleep(100);
                 rc = 1;
             }
         } catch (SQLException e) {
