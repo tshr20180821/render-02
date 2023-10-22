@@ -64,7 +64,7 @@ __HEREDOC__;
     }
 
     function __destruct() {
-        curl_close($this->_ch);
+        // curl_close($this->_ch);
     }
 
     public function trace($message_) {
