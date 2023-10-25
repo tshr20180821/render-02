@@ -73,18 +73,13 @@ public final class LogOperationMain {
     public static void send_slack_message(String message_) {
         try {
             for (int i = 0; i < 2; i++) {
-                var json_data = "{\"text\":\"" + System.getenv("RENDER_EXTERNAL_HOSTNAME") + " " + message_
+                String json_data = "{\"text\":\"" + System.getenv("RENDER_EXTERNAL_HOSTNAME") + " " + message_
                         + "\", \"channel\":\"" + System.getenv("SLACK_CHANNEL_0" + String.valueOf(i + 1)) + "\"}";
-                // _logger.info(json_data);
-                var post_data = HttpRequest.BodyPublishers.ofString(json_data);
-                var client = HttpClient.newHttpClient();
-                var request = HttpRequest.newBuilder(URI.create("https://slack.com/api/chat.postMessage"))
+                HttpRequest.BodyPublisher post_data = HttpRequest.BodyPublishers.ofString(json_data);
+                HttpClient client = HttpClient.newHttpClient();
+                HttpRequest request = HttpRequest.newBuilder(URI.create("https://slack.com/api/chat.postMessage"))
                         .header("Authorization", "Bearer " + System.getenv("SLACK_TOKEN"))
                         .header("Content-Type", "application/json;charset=UTF-8").POST(post_data).build();
-                /*
-                 * var response = client.send(request, HttpResponse.BodyHandlers.ofString()); //
-                 * _logger.info(response.body());
-                 */
                 client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenAccept(response -> {
                     _logger.info(response.body());
                 });

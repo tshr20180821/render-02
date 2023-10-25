@@ -90,10 +90,12 @@ public final class LogOperation {
             try {
                 future.get();
             } catch (InterruptedException e) {
+                rc = -1;
                 _logger.warning("InterruptedException");
                 LogOperationMain.send_slack_message(LogOperationMain.get_stack_trace(e));
                 e.printStackTrace();
             } catch (ExecutionException e) {
+                rc = -1;
                 _logger.warning("ExecutionException");
                 LogOperationMain.send_slack_message(LogOperationMain.get_stack_trace(e));
                 e.printStackTrace();
