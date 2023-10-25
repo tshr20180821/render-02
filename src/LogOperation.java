@@ -29,10 +29,19 @@ public final class LogOperation {
             Class.forName("org.sqlite.JDBC");
             _conn = DriverManager.getConnection("jdbc:sqlite:/tmp/sqlitelog.db");
             _ps = _conn.prepareStatement(
-                    "SELECT seq, process_datetime, pid, level, file, line, function, message FROM t_log WHERE status = 0",
+                    "SELECT seq, process_datetime, pid, level, file, line, function, message FROM t_log WHERE status = 0 ORDER BY seq",
                     ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+        } catch (ClassNotFoundException e) {
+            _logger.warning("ClassNotFoundException");
+            LogOperationMain.send_slack_message(LogOperationMain.get_stack_trace(e));
+            e.printStackTrace();
+        } catch (SQLException e) {
+            _logger.warning("SQLException");
+            LogOperationMain.send_slack_message(LogOperationMain.get_stack_trace(e));
+            e.printStackTrace();
         } catch (Exception e) {
             _logger.warning("Exception");
+            LogOperationMain.send_slack_message(LogOperationMain.get_stack_trace(e));
             e.printStackTrace();
         }
         return _log_operation;
@@ -60,13 +69,20 @@ public final class LogOperation {
                 Thread.sleep(100);
                 rc = 1;
             }
+        } catch (InterruptedException e) {
+            rc = -1;
+            _logger.warning("InterruptedException");
+            LogOperationMain.send_slack_message(LogOperationMain.get_stack_trace(e));
+            e.printStackTrace();
         } catch (SQLException e) {
             rc = -1;
             _logger.warning("SQLException");
+            LogOperationMain.send_slack_message(LogOperationMain.get_stack_trace(e));
             e.printStackTrace();
         } catch (Exception e) {
             rc = -1;
             _logger.warning("Exception");
+            LogOperationMain.send_slack_message(LogOperationMain.get_stack_trace(e));
             e.printStackTrace();
         }
 
@@ -74,16 +90,17 @@ public final class LogOperation {
             try {
                 future.get();
             } catch (InterruptedException e) {
-                rc = -1;
                 _logger.warning("InterruptedException");
+                LogOperationMain.send_slack_message(LogOperationMain.get_stack_trace(e));
                 e.printStackTrace();
             } catch (ExecutionException e) {
-                rc = -1;
                 _logger.warning("ExecutionException");
+                LogOperationMain.send_slack_message(LogOperationMain.get_stack_trace(e));
                 e.printStackTrace();
             } catch (Exception e) {
                 rc = -1;
                 _logger.warning("Exception");
+                LogOperationMain.send_slack_message(LogOperationMain.get_stack_trace(e));
                 e.printStackTrace();
             }
         }
