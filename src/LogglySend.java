@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
+import java.util.Properties;
 
 public final class LogglySend implements Callable<Integer> {
 
@@ -40,7 +41,7 @@ public final class LogglySend implements Callable<Integer> {
 
     @Override
     public final Integer call() throws Exception {
-        this._logger.info("START " + this._seq + " " + this._process_datetime + " " + this._message);
+        this._logger.info("START " + this._seq + " " + this._process_datetime + " " + this._file + " " + this._line + " " + this._function + " " + this._message);
         this.sendLoggly();
         this._logger.info("HALF POINT " + this._seq);
         this.updateLogTable();
@@ -99,7 +100,10 @@ public final class LogglySend implements Callable<Integer> {
         PreparedStatement ps = null;
         try {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:/tmp/sqlitelog.db");
+            var props = new Properties();
+            props.put("journal_mode", "WAL");
+            props.put("busy_timeout", 10000);
+            conn = DriverManager.getConnection("jdbc:sqlite:/tmp/sqlitelog.db", props);
             ps = conn.prepareStatement("UPDATE t_log SET status = 1 WHERE seq = ?");
             ps.setInt(1, this._seq);
             ps.executeUpdate();
@@ -109,6 +113,12 @@ public final class LogglySend implements Callable<Integer> {
             e.printStackTrace();
         } catch (SQLException e) {
             this._logger.warning("SQLException " + this._seq);
+            this._logger.warning("-- e.getMessage() START --");
+            this._logger.warning(e.getMessage());
+            this._logger.warning("-- e.getMessage() FINISH --");
+            this._logger.warning("-- e.getErrorCode() START --");
+            this._logger.warning(String.valueOf(e.getErrorCode()));
+            this._logger.warning("-- e.getErrorCode() FINISH --");
             LogOperationMain.send_slack_message(LogOperationMain.get_stack_trace(e));
             e.printStackTrace();
         } catch (Exception e) {
