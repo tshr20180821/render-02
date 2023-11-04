@@ -30,7 +30,7 @@ RUN apt-get update \
  && curl -L -O https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.9/slf4j-api-2.0.9.jar \
  && curl -L -O https://repo1.maven.org/maven2/org/slf4j/slf4j-nop/2.0.9/slf4j-nop-2.0.9.jar \
  && javac /usr/src/app/*.java \
- && apt-get purge -y --auto-remove default-jdk \
+ && apt-get purge -y --auto-remove default-jdk gcc \
  && apt-get install -y default-jre \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* \
