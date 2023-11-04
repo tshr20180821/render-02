@@ -37,8 +37,7 @@ RUN mkdir -p /var/www/html/auth \
 
 # basic auth
 COPY .htpasswd /var/www/html/
-RUN chmod +x /usr/src/app/log.sh \
- && chmod 644 /var/www/html/.htpasswd
+RUN chmod 644 /var/www/html/.htpasswd
 
 COPY ./class/*.php /usr/src/app/
 COPY ./index.html /var/www/html/
