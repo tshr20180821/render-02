@@ -41,7 +41,8 @@ public final class LogglySend implements Callable<Integer> {
 
     @Override
     public final Integer call() throws Exception {
-        this._logger.info("START " + this._seq + " " + this._process_datetime + " " + this._file + " " + this._line + " " + this._function + " " + this._message);
+        this._logger.info("START " + this._seq + " " + this._process_datetime + " " + this._file + " " + this._line
+                + " " + this._function + " " + this._message);
         this.sendLoggly();
         this._logger.info("HALF POINT " + this._seq);
         this.updateLogTable();
@@ -77,12 +78,12 @@ public final class LogglySend implements Callable<Integer> {
                     + render_external_hostname + "," + render_external_hostname + '_' + deploy_datetime + "/";
             HttpRequest request = HttpRequest.newBuilder(URI.create(uri))
                     .header("Content-Type", "text/plain; charset=utf-8")
-                    .POST(HttpRequest.BodyPublishers.ofString(sb.toString()))
-                    .build();
+                    .POST(HttpRequest.BodyPublishers.ofString(sb.toString())).build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
                 _logger.warning(response.statusCode() + " " + response.body() + "\n" + this._seq + " " + sb.toString());
-                LogOperationMain.send_slack_message(response.statusCode() + " " + response.body() + "\n" + this._seq + " " + sb.toString());
+                LogOperationMain.send_slack_message(
+                        response.statusCode() + " " + response.body() + "\n" + this._seq + " " + sb.toString());
             }
         } catch (IOException e) {
             this._logger.warning("IOException");
