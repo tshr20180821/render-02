@@ -30,7 +30,7 @@ RUN a2dissite -q 000-default.conf \
  && a2enmod -q authz_groupfile rewrite
 
 COPY ./apache.conf /etc/apache2/sites-enabled/
-COPY ./log.sh /usr/src/app/
+COPY --chmod=755 ./log.sh /usr/src/app/
 
 RUN mkdir -p /var/www/html/auth \
  && mkdir -p /var/www/html/phpmyadmin
