@@ -22,12 +22,13 @@ public final class LogglySend implements Callable<Integer> {
     private String _line;
     private String _function;
     private String _message;
+    private String _tags;
 
     private LogglySend() {
     }
 
     public LogglySend(Logger logger_, int seq_, String process_datetime_, String pid_, String level_, String file_,
-            String line_, String function_, String message_) {
+            String line_, String function_, String message_, String tags_) {
         this._logger = logger_;
         this._seq = seq_;
         this._process_datetime = process_datetime_;
@@ -37,12 +38,12 @@ public final class LogglySend implements Callable<Integer> {
         this._line = line_;
         this._function = function_;
         this._message = message_;
+        this._tags = tags_;
     }
 
     @Override
     public final Integer call() throws Exception {
-        this._logger.info("START " + this._seq + " " + this._process_datetime + " " + this._file + " " + this._line
-                + " " + this._function + " " + this._message);
+        this._logger.info("START " + this._seq + " " + this._process_datetime + " " + this._file + " " + this._line + " " + this._function + " " + this._message);
         this.sendLoggly();
         this._logger.info("HALF POINT " + this._seq);
         this.updateLogTable();
@@ -75,15 +76,15 @@ public final class LogglySend implements Callable<Integer> {
             HttpRequest.BodyPublisher post_data = HttpRequest.BodyPublishers.ofString(sb.toString());
             HttpClient client = HttpClient.newHttpClient();
             String uri = "https://logs-01.loggly.com/inputs/" + System.getenv("LOGGLY_TOKEN") + "/tag/"
-                    + render_external_hostname + "," + render_external_hostname + '_' + deploy_datetime + "," + this._level + "/";
+                    + render_external_hostname + "," + render_external_hostname + "_" + deploy_datetime + "," + this._tags + "/";
             HttpRequest request = HttpRequest.newBuilder(URI.create(uri))
                     .header("Content-Type", "text/plain; charset=utf-8")
-                    .POST(HttpRequest.BodyPublishers.ofString(sb.toString())).build();
+                    .POST(HttpRequest.BodyPublishers.ofString(sb.toString()))
+                    .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
                 _logger.warning(response.statusCode() + " " + response.body() + "\n" + this._seq + " " + sb.toString());
-                LogOperationMain.send_slack_message(
-                        response.statusCode() + " " + response.body() + "\n" + this._seq + " " + sb.toString());
+                LogOperationMain.send_slack_message(response.statusCode() + " " + response.body() + "\n" + this._seq + " " + sb.toString());
             }
         } catch (IOException e) {
             this._logger.warning("IOException");
