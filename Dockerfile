@@ -20,6 +20,8 @@ RUN apt-get update \
   libonig-dev \
   libsqlite3-0 \
   tzdata \
+ && MAKEFLAGS="-j $(nproc)" pecl install apcu \
+ && docker-php-ext-enable apcu \
  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
  && docker-php-ext-install -j$(nproc) \
   imap \
