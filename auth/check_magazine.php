@@ -9,7 +9,19 @@ $requesturi = $_SERVER['REQUEST_URI'];
 $time_start = microtime(true);
 $log->info("START {$requesturi}");
 
+$mem_info = 'memory_get_usage true : ' . number_format(memory_get_usage(true))
+    . "\nmemory_get_usage false : " . number_format(memory_get_usage())
+    . "\nmemory_get_peak_usage true : " . number_format(memory_get_peak_usage(true))
+    . "\nmemory_get_peak_usage false : " . number_format(memory_get_peak_usage())
+$log->info($mem_info);
+
 check_magazine();
+
+$mem_info = 'memory_get_usage true : ' . number_format(memory_get_usage(true))
+    . "\nmemory_get_usage false : " . number_format(memory_get_usage())
+    . "\nmemory_get_peak_usage true : " . number_format(memory_get_peak_usage(true))
+    . "\nmemory_get_peak_usage false : " . number_format(memory_get_peak_usage())
+$log->info($mem_info);
 
 $log->info('FINISH ' . substr((microtime(true) - $time_start), 0, 7) . 's');
 
