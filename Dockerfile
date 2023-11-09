@@ -11,7 +11,7 @@ ENV LDFLAGS="-fuse-ld=gold"
 # basic auth
 COPY --chmod=644 .htpasswd /var/www/html/
 
-# default-jre : java
+# default-jre-headless : java
 # libc-client2007e-dev : imap
 # libkrb5-dev : imap
 # libonig-dev : mbstring
@@ -27,7 +27,7 @@ RUN apt-get -q update \
   tzdata \
  && MAKEFLAGS="-j $(nproc)" pecl install apcu >/dev/null \
  && docker-php-ext-enable apcu \
- && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
+ && docker-php-ext-configure imap --with-kerberos --with-imap-ssl >/dev/null \
  && docker-php-ext-install -j$(nproc) \
   imap \
   mbstring \
