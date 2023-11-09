@@ -101,13 +101,14 @@ __HEREDOC__;
             $milli_sec = substr($mt[1] . '000' , 0, 3);
         }
         $log_datetime = date('Y-m-d H:i:s.') . $milli_sec;
-        $log_header = $_ENV['RENDER_EXTERNAL_HOSTNAME'] . ' ' . $_ENV['DEPLOY_DATETIME'] . ' ' . getmypid() . " {$level} {$file} {$line}";
+        $pid = getmypid();
+        $log_header = $_ENV['RENDER_EXTERNAL_HOSTNAME'] . ' ' . $_ENV['DEPLOY_DATETIME'] . " {$pid} {$level} {$file} {$line}";
 
         file_put_contents('php://stderr', "{$log_datetime} \033[0;" . self::COLOR_LIST[$level] . "m{$log_header}\033[0m {$function_chain} {$message_}\n");
         
         $this->_statement_insert->execute(
             [':b_process_datetime' => $log_datetime,
-             ':b_pid' => getmypid(),
+             ':b_pid' => $pid,
              ':b_level' => $level,
              ':b_file' => $file,
              ':b_line' => $line,
