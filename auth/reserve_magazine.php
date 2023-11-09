@@ -56,7 +56,7 @@ function access_library2($pdo_sqlite_, $symbol_, $title_, $bibid_, $lib_id_, $li
     
     $mu->send_slack_message("予約開始 {$title_} {$bibid_}");
     
-    $cookie = '/tmp/cookie' . basename(__FILE__);
+    $cookie = '/tmp/cookie' . basename(__FILE__) . $symbol_;
     clearstatcache();
     @unlink($cookie);
     
