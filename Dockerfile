@@ -34,7 +34,7 @@ RUN apt-get -q update \
   mysqli \
   pdo_mysql \
   >/dev/null \
- && apt-get purge -y --auto-remove gcc make \
+ && apt-get purge -y --auto-remove gcc gpgv libonig-dev make \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* \
  && a2dissite -q 000-default.conf \
