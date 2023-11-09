@@ -2,12 +2,10 @@
 
 set -x
 
-apt-get update
-apt-get -y upgrade
+# apt-get update
+# apt-get -y upgrade
 
 dpkg -l
-
-ls -lang
 
 # phpMyAdmin
 export BLOWFISH_SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
