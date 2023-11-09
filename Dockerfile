@@ -22,12 +22,11 @@ RUN apt-get -q update \
   libkrb5-dev \
   libonig-dev \
   libsqlite3-0 \
-  time \
   tzdata \
- && time MAKEFLAGS="-j $(nproc)" pecl install apcu >/dev/null \
+ && MAKEFLAGS="-j $(nproc)" pecl install apcu >/dev/null \
  && docker-php-ext-enable apcu \
  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
- && time docker-php-ext-install -j$(nproc) \
+ && docker-php-ext-install -j$(nproc) \
   imap \
   mbstring \
   mysqli \
