@@ -11,6 +11,8 @@ ENV LDFLAGS="-fuse-ld=gold"
 # basic auth
 COPY --chmod=644 .htpasswd /var/www/html/
 
+ENV SQLITE_JDBC_VERSION="3.43.2.2"
+
 # default-jre-headless : java
 # libc-client2007e-dev : imap
 # libkrb5-dev : imap
@@ -42,7 +44,7 @@ RUN apt-get -q update \
  && mkdir -p /var/www/html/auth \
  && mkdir -p /var/www/html/phpmyadmin \
  && curl -sS \
-  -LO https://github.com/xerial/sqlite-jdbc/releases/download/3.43.2.0/sqlite-jdbc-3.43.2.0.jar \
+  -LO https://github.com/xerial/sqlite-jdbc/releases/download/$SQLITE_JDBC_VERSION/sqlite-jdbc-$SQLITE_JDBC_VERSION.jar \
   -LO https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.9/slf4j-api-2.0.9.jar \
   -LO https://repo1.maven.org/maven2/org/slf4j/slf4j-nop/2.0.9/slf4j-nop-2.0.9.jar \
   -O https://raw.githubusercontent.com/tshr20180821/render-07/main/app/LogOperation.jar \
