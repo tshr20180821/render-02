@@ -79,6 +79,9 @@ class MyUtils
         }
         if (is_null($options_) === false) {
             foreach ($options_ as $key => $value) {
+                if ($key == CURLOPT_USERPWD) {
+                    $value = base64_decode($value);
+                }
                 $rc = curl_setopt($ch, $key, $value);
                 if ($rc == false) {
                     $this->_log->info("curl_setopt : {$key} {$value}");
