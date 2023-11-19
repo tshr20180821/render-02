@@ -37,7 +37,7 @@ function health_check()
    <link href="http://example.org/"/>
    <id>tag:__ID__</id>
    <updated>__UPDATED__</updated>
-   <summary>__FQDN__ Log Size : __LOG_SIZE__MB __RECORD__</summary>
+   <summary>Log Size : __LOG_SIZE__MB __RECORD__</summary>
  </entry>
 </feed>
 __HEREDOC__;
