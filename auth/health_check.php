@@ -25,20 +25,20 @@ function health_check()
     $atom = <<< __HEREDOC__
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
- <title>Health Check __FQDN__</title>
- <link href="http://example.org/"/>
- <updated>2022-01-01T00:00:00Z</updated>
- <author>
-   <name>__FQDN__</name>
- </author>
- <id>tag:__FQDN__</id>
- <entry>
-   <title>__DEPLOY_DATETIME__</title>
-   <link href="http://example.org/"/>
-   <id>tag:__ID__</id>
-   <updated>__UPDATED__</updated>
-   <summary>Log Size : __LOG_SIZE__MB __RECORD__</summary>
- </entry>
+  <title>Health Check __FQDN__</title>
+  <link href="http://example.org/"/>
+  <updated>2022-01-01T00:00:00Z</updated>
+  <author>
+    <name>__FQDN__</name>
+  </author>
+  <id>tag:__FQDN__</id>
+  <entry>
+    <title>__DEPLOY_DATETIME__</title>
+    <link href="http://example.org/"/>
+    <id>tag:__ID__</id>
+    <updated>__UPDATED__</updated>
+    <summary>Log Size : __LOG_SIZE__MB __RECORD__</summary>
+  </entry>
 </feed>
 __HEREDOC__;
     
