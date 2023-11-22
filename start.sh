@@ -4,6 +4,8 @@ set -x
 
 dpkg -l
 
+export SQLITE_LOG_DB_FILE="/tmp/sqlitelog.db"
+
 # phpMyAdmin
 export BLOWFISH_SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
