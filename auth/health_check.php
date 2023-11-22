@@ -72,8 +72,8 @@ __HEREDOC__;
     
     $record = "\r\n";
     clearstatcache();
-    if (file_exists($_ENV['SQLITE_LOG_DB_FILE'])) {
-        $pdo = new PDO('sqlite:' . $_ENV['SQLITE_LOG_DB_FILE']);
+    if (file_exists('/tmp/sqlite.db')) {
+        $pdo = new PDO('sqlite:/tmp/sqlite.db');
         
         $statement_select = $pdo->prepare($sql_select);
         $rc = $statement_select->execute();
