@@ -11,7 +11,7 @@ ENV LDFLAGS="-fuse-ld=gold"
 # basic auth
 COPY --chmod=644 .htpasswd /var/www/html/
 
-ENV SQLITE_JDBC_VERSION="3.43.2.2"
+ENV SQLITE_JDBC_VERSION="3.44.0.0"
 
 # default-jre-headless : java
 # libc-client2007e-dev : imap
