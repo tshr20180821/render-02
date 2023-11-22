@@ -16,8 +16,8 @@ class Log
     function __construct() {
 
         clearstatcache();
-        if (!file_exists('/tmp/sqlitelog.db')) {
-            $pdo = new PDO('sqlite:/tmp/sqlitelog.db', NULL, NULL, array(PDO::ATTR_PERSISTENT => TRUE));
+        if (!file_exists($_ENV['SQLITE_LOG_DB_FILE'])) {
+            $pdo = new PDO('sqlite:' . $_ENV['SQLITE_LOG_DB_FILE'], NULL, NULL, array(PDO::ATTR_PERSISTENT => TRUE));
 
             $sql_create = <<< __HEREDOC__
 CREATE TABLE t_log (
@@ -41,7 +41,7 @@ __HEREDOC__;
             exec('cd /usr/src/app && java -classpath .:sqlite-jdbc-' . $_ENV['SQLITE_JDBC_VERSION']
                  . '.jar:slf4j-api-2.0.9.jar:slf4j-nop-2.0.9.jar:LogOperation.jar -Duser.timezone=Asia/Tokyo -Dfile.encoding=UTF-8 LogOperationMain &');
         } else {
-            $pdo = new PDO('sqlite:/tmp/sqlitelog.db', NULL, NULL, array(PDO::ATTR_PERSISTENT => TRUE));
+            $pdo = new PDO('sqlite:' . $_ENV['SQLITE_LOG_DB_FILE'], NULL, NULL, array(PDO::ATTR_PERSISTENT => TRUE));
         }
         $pdo->exec('PRAGMA journal_mode = WAL;');
         $pdo->exec('PRAGMA busy_timeout = 10000;');
