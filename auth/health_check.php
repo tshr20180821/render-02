@@ -33,7 +33,7 @@ function health_check()
   </author>
   <id>tag:__FQDN__</id>
   <entry>
-    <title>__DEPLOY_DATETIME__</title>
+    <title>__DEPLOY_DATETIME__ Deployed</title>
     <link href="http://example.org/"/>
     <id>tag:__ID__</id>
     <updated>__UPDATED__</updated>
