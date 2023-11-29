@@ -4,6 +4,9 @@ set -x
 
 dpkg -l
 
+export APACHE_VERSION=$(apachectl -V | head -n 1)
+export PHP_VERSION=$(php --version | head -n 1)
+
 export SQLITE_LOG_DB_FILE="/tmp/sqlitelog.db"
 
 # phpMyAdmin
@@ -18,10 +21,8 @@ sed -i s/__DEPLOY_DATETIME__/${DEPLOY_DATETIME}/ /etc/apache2/sites-enabled/apac
 echo ServerName ${RENDER_EXTERNAL_HOSTNAME} >/etc/apache2/sites-enabled/server_name.conf
 
 echo "${RENDER_EXTERNAL_HOSTNAME} START ${DEPLOY_DATETIME}" >VERSION.txt
-echo "Apache" >>VERSION.txt
-apachectl -V | head -n 1 >>VERSION.txt
-echo -e "PHP" >>VERSION.txt
-php --version | head -n 1 >>VERSION.txt
+echo "Apache : ${APACHE_VERSION}" >>VERSION.txt
+echo "PHP : ${PHP_VERSION}" >>VERSION.txt
 
 VERSION=$(cat VERSION.txt)
 rm VERSION.txt
