@@ -1,8 +1,12 @@
-FROM php:8.2-apache
+FROM php:8.3-apache
 
 EXPOSE 80
 
+SHELL ["/bin/bash", "-c"]
+
 WORKDIR /usr/src/app
+
+ENV DEBIAN_CODE_NAME="bookworm"
 
 ENV CFLAGS="-O2 -march=native -mtune=native -fomit-frame-pointer"
 ENV CXXFLAGS="$CFLAGS"
@@ -11,7 +15,7 @@ ENV LDFLAGS="-fuse-ld=gold"
 # basic auth
 COPY --chmod=644 .htpasswd /var/www/html/
 
-ENV SQLITE_JDBC_VERSION="3.44.0.0"
+ENV SQLITE_JDBC_VERSION="3.44.1.0"
 
 # default-jre-headless : java
 # libc-client2007e-dev : imap
@@ -19,7 +23,7 @@ ENV SQLITE_JDBC_VERSION="3.44.0.0"
 # libonig-dev : mbstring
 # libsqlite3-0 : php sqlite
 # tzdata : ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
-RUN apt-get -q update \
+RUN apt-get -qq update \
  && apt-get install -y --no-install-recommends \
   default-jre-headless \
   libc-client2007e-dev \
@@ -34,9 +38,10 @@ RUN apt-get -q update \
   imap \
   mbstring \
   mysqli \
+  opcache \
   pdo_mysql \
   >/dev/null \
- && apt-get purge -y --auto-remove gcc gpgv libonig-dev make \
+ && apt-get purge -y --auto-remove gcc gpgv libonig-dev make re2c \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* \
  && a2dissite -q 000-default.conf \
@@ -61,5 +66,7 @@ COPY --chmod=755 ./log.sh /usr/src/app/
 COPY ./class/*.php ./start.sh /usr/src/app/
 COPY ./index.html ./robots.txt /var/www/html/
 COPY ./auth/*.php ./auth/*.css /var/www/html/auth/
- 
-ENTRYPOINT ["bash","/usr/src/app/start.sh"]
+
+STOPSIGNAL SIGWINCH
+
+ENTRYPOINT ["/bin/bash","/usr/src/app/start.sh"]
