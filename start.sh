@@ -33,10 +33,12 @@ curl -sS -X POST -H "Authorization: Bearer ${SLACK_TOKEN}" \
 && curl -sS -X POST -H "Authorization: Bearer ${SLACK_TOKEN}" \
   -d "text=${VERSION}" -d "channel=${SLACK_CHANNEL_02}" https://slack.com/api/chat.postMessage >/dev/null &
 
-# while true; do sleep 840s && ps aux && curl -sS -A "keep online" -u ${BASIC_USER}:${BASIC_PASSWORD} https://${RENDER_EXTERNAL_HOSTNAME}/; done &
+# while true; do sleep 840s && ps aux && curl -sS -A "health check" -u ${BASIC_USER}:${BASIC_PASSWORD} https://${RENDER_EXTERNAL_HOSTNAME}/; done &
 while true; \
   do for i in {1..16}; do sleep 60s && echo ${i}; done \
-  && ps aux && curl -sS -A "health check" -u ${BASIC_USER}:${BASIC_PASSWORD} https://${RENDER_EXTERNAL_HOSTNAME}/; \
+  && ss -anpt \
+  && ps aux \
+  && curl -sS -A "health check" -u ${BASIC_USER}:${BASIC_PASSWORD} https://${RENDER_EXTERNAL_HOSTNAME}/; \
 done &
 
 . /etc/apache2/envvars
