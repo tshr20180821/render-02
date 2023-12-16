@@ -13,8 +13,6 @@ ENV CXXFLAGS="${CFLAGS}"
 ENV LDFLAGS="-fuse-ld=gold"
 
 COPY ./php.ini ${PHP_INI_DIR}/
-# basic auth
-COPY --chmod=644 .htpasswd /var/www/html/
 COPY ./apache.conf /etc/apache2/sites-enabled/
 
 ENV APACHE_VERSION="2.4.58-1"
@@ -92,7 +90,7 @@ RUN set -x \
   rewrite \
  && ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
  && tar xf ./phpMyAdmin-${PHPMYADMIN_VERSION}-all-languages.tar.xz --strip-components=1 -C /var/www/html/phpmyadmin \
- && rm ./phpMyAdmin-${PHPMYADMIN_VERSION}-all-languages.tar.xz ./download.txt \
+ && rm ./phpMyAdmin-${PHPMYADMIN_VERSION}-all-languages.tar.xz ./download.txt ./gpg \
  && chown www-data:www-data /var/www/html/phpmyadmin -R \
  && echo '<HTML />' >/var/www/html/index.html \
  && { \
