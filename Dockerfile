@@ -55,7 +55,10 @@ RUN set -x \
   apache2_${APACHE_VERSION}_amd64.deb \
  && rm -f *.deb \
  && MAKEFLAGS="-j $(nproc)" pecl install apcu >/dev/null \
- && docker-php-ext-enable apcu \
+ && MAKEFLAGS="-j ${nproc}" pecl install redis >/dev/null \
+ && docker-php-ext-enable \
+  apcu \
+  redis \
  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl >/dev/null \
  && docker-php-ext-install -j$(nproc) \
   imap \
