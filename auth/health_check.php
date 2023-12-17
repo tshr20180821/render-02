@@ -92,6 +92,12 @@ __HEREDOC__;
         $file_size = filesize($_ENV['SQLITE_LOG_DB_FILE']) / 1024 / 1024;
     }
     
+    $redis = new Redis();
+    // UPSTASH_REDIS_URL : tlsv1.2://...
+    $redis->connect(getenv('UPSTASH_REDIS_URL'), getenv('UPSTASH_REDIS_PORT'), 10, NULL, 0, 0, ['auth' => getenv('UPSTASH_REDIS_PASSWORD')]);
+    $apt_result = $redis->get('APT_RESULT_' . getenv('RENDER_EXTERNAL_HOSTNAME'));
+    $redis->close();
+    
     $tmp = str_split($_ENV['DEPLOY_DATETIME'], 2);
     $atom = str_replace('__DEPLOY_DATETIME__', $tmp[0] . $tmp[1] . '-' . $tmp[2] . '-' . $tmp[3] . ' ' . $tmp[4] . ':' . $tmp[5] . ':' . $tmp[6], $atom);
     $atom = str_replace('__ID__', $_ENV['RENDER_EXTERNAL_HOSTNAME'] . '-' . uniqid(), $atom);
