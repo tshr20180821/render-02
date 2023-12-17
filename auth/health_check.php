@@ -37,7 +37,8 @@ function health_check()
     <link href="http://example.org/"/>
     <id>tag:__ID__</id>
     <updated>__UPDATED__</updated>
-    <summary>Log Size : __LOG_SIZE__MB __RECORD__
+    <summary>Log Size : __LOG_SIZE__MB
+__RECORD__
 apt Check : __APT_RESULT__</summary>
   </entry>
 </feed>
@@ -96,7 +97,7 @@ __HEREDOC__;
     $atom = str_replace('__ID__', $_ENV['RENDER_EXTERNAL_HOSTNAME'] . '-' . uniqid(), $atom);
     $atom = str_replace('__FQDN__', $_ENV['RENDER_EXTERNAL_HOSTNAME'], $atom);
     $atom = str_replace('__UPDATED__', date('Y-m-d') . 'T' . date('H:i:s') . '+09', $atom);
-    $atom = str_replace('__RECORD__', $record, $atom);
+    $atom = str_replace('__RECORD__', trim($record), $atom);
     $atom = str_replace('__LOG_SIZE__', number_format($file_size), $atom);
     $atom = str_replace('__APT_RESULT__', $apt_result, $atom);
 
