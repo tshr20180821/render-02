@@ -43,6 +43,7 @@ RUN set -x \
  && apt-get -qq update \
  && apt-get install -y --no-install-recommends \
   default-jre-headless \
+  iproute2 \
   libc-client2007e-dev \
   libkrb5-dev \
   libonig-dev \
