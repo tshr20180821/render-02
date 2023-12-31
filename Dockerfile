@@ -26,6 +26,7 @@ ENV SQLITE_JDBC_VERSION="3.44.1.0"
 # libsqlite3-0 : php sqlite
 # tzdata : ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 RUN set -x \
+ && date -d '+9 hours' +'%Y-%m-%d %H:%M:%S' >./BuildDateTime.txt \
  && savedAptMark="$(apt-mark showmanual)" \
  && { \
   echo "https://github.com/xerial/sqlite-jdbc/releases/download/$SQLITE_JDBC_VERSION/sqlite-jdbc-$SQLITE_JDBC_VERSION.jar"; \
