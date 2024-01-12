@@ -35,10 +35,6 @@ RUN set -x \
   echo "https://raw.githubusercontent.com/tshr20180821/render-07/main/app/slf4j-nop-2.0.9.jar"; \
   echo "https://raw.githubusercontent.com/tshr20180821/render-07/main/app/LogOperation.jar"; \
   echo "https://raw.githubusercontent.com/tshr20180821/render-07/main/app/gpg"; \
-  echo "http://mirror.coganng.com/debian/pool/main/a/apache2/apache2_${APACHE_VERSION}_amd64.deb"; \
-  echo "http://mirror.coganng.com/debian/pool/main/a/apache2/apache2-bin_${APACHE_VERSION}_amd64.deb"; \
-  echo "http://mirror.coganng.com/debian/pool/main/a/apache2/apache2-data_${APACHE_VERSION}_all.deb"; \
-  echo "http://mirror.coganng.com/debian/pool/main/a/apache2/apache2-utils_${APACHE_VERSION}_amd64.deb"; \
   } >download.txt \
  && xargs -P2 -n1 curl -sSLO <download.txt \
  && apt-get -qq update \
@@ -50,12 +46,6 @@ RUN set -x \
   libonig-dev \
   libsqlite3-0 \
   tzdata \
- && dpkg -i \
-  apache2-bin_${APACHE_VERSION}_amd64.deb \
-  apache2-data_${APACHE_VERSION}_all.deb \
-  apache2-utils_${APACHE_VERSION}_amd64.deb \
-  apache2_${APACHE_VERSION}_amd64.deb \
- && rm -f *.deb \
  && MAKEFLAGS="-j $(nproc)" pecl install apcu >/dev/null \
  && MAKEFLAGS="-j ${nproc}" pecl install redis >/dev/null \
  && docker-php-ext-enable \
