@@ -44,6 +44,7 @@ RUN set -x \
   libc-client2007e-dev \
   libkrb5-dev \
   libonig-dev \
+  libpq-dev \
   libsqlite3-0 \
   tzdata \
  && MAKEFLAGS="-j $(nproc)" pecl install apcu >/dev/null \
@@ -58,6 +59,7 @@ RUN set -x \
   mysqli \
   opcache \
   pdo_mysql \
+  pdo_pgsql \
   >/dev/null \
  && apt-get upgrade -y --no-install-recommends \
  && pecl clear-cache \
