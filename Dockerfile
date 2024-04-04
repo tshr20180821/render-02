@@ -6,8 +6,6 @@ SHELL ["/bin/bash", "-c"]
 
 WORKDIR /usr/src/app
 
-ENV DEBIAN_CODE_NAME="bookworm"
-
 ENV CFLAGS="-O2 -march=native -mtune=native -fomit-frame-pointer"
 ENV CXXFLAGS="${CFLAGS}"
 ENV LDFLAGS="-fuse-ld=gold"
@@ -20,6 +18,7 @@ ENV PHPMYADMIN_VERSION="5.2.1"
 ENV SQLITE_JDBC_VERSION="3.45.0.0"
 
 # default-jre-headless : java
+# iproute2 : ss
 # libc-client2007e-dev : imap
 # libkrb5-dev : imap
 # libonig-dev : mbstring
@@ -47,19 +46,21 @@ RUN set -x \
   libpq-dev \
   libsqlite3-0 \
   tzdata \
- && MAKEFLAGS="-j $(nproc)" pecl install apcu >/dev/null \
+ && nproc=$(nproc) \
+ && MAKEFLAGS="-j ${nproc}" pecl install apcu >/dev/null \
  && MAKEFLAGS="-j ${nproc}" pecl install redis >/dev/null \
  && docker-php-ext-enable \
   apcu \
   redis \
  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl >/dev/null \
- && docker-php-ext-install -j$(nproc) \
+ && docker-php-ext-install -j${nproc} \
   imap \
   mbstring \
   mysqli \
   opcache \
   pdo_mysql \
   pdo_pgsql \
+  pgsql \
   >/dev/null \
  && apt-get upgrade -y --no-install-recommends \
  && pecl clear-cache \
