@@ -15,7 +15,7 @@ COPY ./apache.conf /etc/apache2/sites-enabled/
 
 ENV APACHE_VERSION="2.4.58-1"
 ENV PHPMYADMIN_VERSION="5.2.1"
-ENV SQLITE_JDBC_VERSION="3.45.0.0"
+ENV SQLITE_JDBC_VERSION="3.49.0.0"
 
 # default-jre-headless : java
 # iproute2 : ss
