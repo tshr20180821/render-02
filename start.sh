@@ -57,8 +57,6 @@ curl -sS -X POST -H "Authorization: Bearer ${SLACK_TOKEN}" \
 # apt upgrade info cached
 sleep 3m && apt_result2cache &
 
-df -h –total
-
 # apt upgrade info cached
 while true; do \
   for i in {1..144}; do \
