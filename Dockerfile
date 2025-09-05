@@ -45,7 +45,9 @@ RUN set -x \
   libonig-dev \
   libpq-dev \
   libsqlite3-0 \
-  tzdata \
+  tzdata
+RUN set -x \
+ && apt-get install -y --no-install-recommends \
   uw-imap-dev
 RUN set -x \
  && nproc=$(nproc) \
