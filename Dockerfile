@@ -41,12 +41,13 @@ RUN set -x \
  && apt-get install -y --no-install-recommends \
   default-jre-headless \
   iproute2 \
-  libc-client2007e-dev \
   libkrb5-dev \
   libonig-dev \
   libpq-dev \
   libsqlite3-0 \
   tzdata \
+  uw-imap-dev
+RUN set -x \
  && nproc=$(nproc) \
  && MAKEFLAGS="-j ${nproc}" pecl install apcu >/dev/null \
  && MAKEFLAGS="-j ${nproc}" pecl install redis >/dev/null \
