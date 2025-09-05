@@ -36,7 +36,8 @@ RUN set -x \
   echo "https://raw.githubusercontent.com/tshr20180821/render-07/main/app/gpg"; \
   } >download.txt \
  && xargs -P2 -n1 curl -sSLO <download.txt \
- && apt-get -qq update \
+ && apt-get -qq update
+RUN set -x \
  && apt-get install -y --no-install-recommends \
   default-jre-headless \
   iproute2 \
