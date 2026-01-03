@@ -58,9 +58,7 @@ RUN set -x \
 #  &&
 
 RUN set -x \
- && apt-get install gcc cc
-
-RUN set -x \
+ && apt-get install gcc
  && nproc=$(nproc) \
  && MAKEFLAGS="-j ${nproc}" pecl install apcu \
  && MAKEFLAGS="-j ${nproc}" pecl install redis
