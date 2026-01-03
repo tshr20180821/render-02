@@ -58,13 +58,15 @@ RUN set -x \
 #  && 
 RUN set -x \
  && nproc=$(nproc) \
- && MAKEFLAGS="-j ${nproc}" pecl install apcu >/dev/null \
- && MAKEFLAGS="-j ${nproc}" pecl install redis >/dev/null
+ && MAKEFLAGS="-j ${nproc}" pecl install apcu \
+ && MAKEFLAGS="-j ${nproc}" pecl install redis
+
 RUN set -x \
  && nproc=$(nproc) \
  && docker-php-ext-enable \
   apcu \
   redis
+ 
 RUN set -x \
  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl >/dev/null
 RUN set -x \
