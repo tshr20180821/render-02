@@ -59,11 +59,16 @@ RUN set -x \
 RUN set -x \
  && nproc=$(nproc) \
  && MAKEFLAGS="-j ${nproc}" pecl install apcu >/dev/null \
- && MAKEFLAGS="-j ${nproc}" pecl install redis >/dev/null \
+ && MAKEFLAGS="-j ${nproc}" pecl install redis >/dev/null
+RUN set -x \
+ && nproc=$(nproc) \
  && docker-php-ext-enable \
   apcu \
-  redis \
- && docker-php-ext-configure imap --with-kerberos --with-imap-ssl >/dev/null \
+  redis
+RUN set -x \
+ && docker-php-ext-configure imap --with-kerberos --with-imap-ssl >/dev/null
+RUN set -x \
+ && nproc=$(nproc) \
  && docker-php-ext-install -j${nproc} \
   imap \
   mbstring \
@@ -71,8 +76,8 @@ RUN set -x \
   opcache \
   pdo_mysql \
   pdo_pgsql \
-  pgsql \
-  >/dev/null
+  pgsql
+
 RUN set -x \
  && apt-get upgrade -y --no-install-recommends \
  && pecl clear-cache \
