@@ -55,7 +55,11 @@ RUN set -x \
 #  && tar xvzf imap-1.0.3.tgz \
 #  && pushd imap-1.0.3 \
 #  && /usr/local/bin/phpize \
-#  && 
+#  &&
+
+RUN set -x \
+ && apt-get install gcc
+
 RUN set -x \
  && nproc=$(nproc) \
  && MAKEFLAGS="-j ${nproc}" pecl install apcu \
