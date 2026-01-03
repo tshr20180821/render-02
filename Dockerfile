@@ -46,9 +46,16 @@ RUN set -x \
   libpq-dev \
   libsqlite3-0 \
   tzdata
-RUN set -x \
- && apt-get install -y --no-install-recommends \
-  uw-imap-dev
+# RUN set -x \
+#  && apt-get install -y --no-install-recommends \
+#   uw-imap-dev
+# RUN set -x \
+#  && pushd /usr/local/src \
+#  && curl -O https://pecl.php.net/get/imap-1.0.3.tgz \
+#  && tar xvzf imap-1.0.3.tgz \
+#  && pushd imap-1.0.3 \
+#  && /usr/local/bin/phpize \
+#  && 
 RUN set -x \
  && nproc=$(nproc) \
  && MAKEFLAGS="-j ${nproc}" pecl install apcu >/dev/null \
