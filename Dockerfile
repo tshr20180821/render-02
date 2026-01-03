@@ -72,7 +72,8 @@ RUN set -x \
   pdo_mysql \
   pdo_pgsql \
   pgsql \
-  >/dev/null \
+  >/dev/null
+RUN set -x \
  && apt-get upgrade -y --no-install-recommends \
  && pecl clear-cache \
  && apt-get purge -y --auto-remove \
