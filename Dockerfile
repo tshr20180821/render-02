@@ -58,7 +58,7 @@ RUN set -x \
 #  &&
 
 RUN set -x \
- && apt-get install gcc
+ && apt-get install gcc cc
 
 RUN set -x \
  && nproc=$(nproc) \
