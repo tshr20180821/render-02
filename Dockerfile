@@ -59,7 +59,6 @@ RUN set -x \
 
 RUN set -x \
  && apt-get upgrade -y --no-install-recommends \
- && pecl clear-cache \
  && apt-get purge -y --auto-remove \
   gcc \
   gpgv \
