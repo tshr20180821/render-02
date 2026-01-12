@@ -60,13 +60,11 @@ RUN set -x \
 RUN set -x \
  && apt-get install -y --no-install-recommends build-essential \
  && nproc=$(nproc) \
- && MAKEFLAGS="-j ${nproc}" pecl install apcu \
  && MAKEFLAGS="-j ${nproc}" pecl install redis
 
 RUN set -x \
  && nproc=$(nproc) \
  && docker-php-ext-enable \
-  apcu \
   redis
  
 RUN set -x \
