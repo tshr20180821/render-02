@@ -57,12 +57,11 @@ RUN set -x \
 #  && /usr/local/bin/phpize \
 #  &&
  
-RUN set -x \
- && docker-php-ext-configure imap --with-kerberos --with-imap-ssl >/dev/null
+# RUN set -x \
+#  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl >/dev/null
 RUN set -x \
  && nproc=$(nproc) \
  && docker-php-ext-install -j${nproc} \
-  imap \
   mbstring \
   mysqli \
   opcache \
