@@ -62,7 +62,6 @@ RUN set -x \
 RUN set -x \
  && nproc=$(nproc) \
  && docker-php-ext-install -j${nproc} \
-  mbstring \
   mysqli \
   opcache \
   pdo_mysql \
