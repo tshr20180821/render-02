@@ -56,16 +56,6 @@ RUN set -x \
 #  && pushd imap-1.0.3 \
 #  && /usr/local/bin/phpize \
 #  &&
-
-RUN set -x \
- && apt-get install -y --no-install-recommends build-essential \
- && nproc=$(nproc) \
- && MAKEFLAGS="-j ${nproc}" pecl install redis
-
-RUN set -x \
- && nproc=$(nproc) \
- && docker-php-ext-enable \
-  redis
  
 RUN set -x \
  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl >/dev/null
