@@ -56,17 +56,6 @@ RUN set -x \
 #  && pushd imap-1.0.3 \
 #  && /usr/local/bin/phpize \
 #  &&
- 
-# RUN set -x \
-#  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl >/dev/null
-RUN set -x \
- && nproc=$(nproc) \
- && docker-php-ext-install -j${nproc} \
-  mysqli \
-  opcache \
-  pdo_mysql \
-  pdo_pgsql \
-  pgsql
 
 RUN set -x \
  && apt-get upgrade -y --no-install-recommends \
