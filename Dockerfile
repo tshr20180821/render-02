@@ -1,102 +1,98 @@
-FROM php:8.3-apache
+FROM php:8.2-apache
 
 EXPOSE 80
 
-SHELL ["/bin/bash", "-c"]
+ENV CFLAGS="-O2 -march=native -mtune=native -fomit-frame-pointer"
+ENV CXXFLAGS="$CFLAGS"
+ENV LDFLAGS="-fuse-ld=gold"
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /usr/src/app
 
-ENV CFLAGS="-O2 -march=native -mtune=native -fomit-frame-pointer"
-ENV CXXFLAGS="${CFLAGS}"
-ENV LDFLAGS="-fuse-ld=gold"
+COPY ./composer.json /usr/src/app
 
-COPY ./php.ini ${PHP_INI_DIR}/
-COPY ./apache.conf /etc/apache2/sites-enabled/
+# ENV SQLITE_JDBC_VERSION="3.50.3.0"
+ENV SQLITE_JDBC_VERSION="3.51.1.0"
+ENV SLF4J_VERSION="2.0.17"
 
-ENV APACHE_VERSION="2.4.58-1"
-ENV PHPMYADMIN_VERSION="5.2.1"
-ENV SQLITE_JDBC_VERSION="3.50.2.0"
-
-# default-jre-headless : java
-# iproute2 : ss
-# libc-client2007e-dev : imap
-# libkrb5-dev : imap
-# libonig-dev : mbstring
-# libsqlite3-0 : php sqlite
-# tzdata : ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 RUN set -x \
  && date -d '+9 hours' +'%Y-%m-%d %H:%M:%S' >./BuildDateTime.txt \
- && savedAptMark="$(apt-mark showmanual)" \
- && { \
-  echo "https://github.com/xerial/sqlite-jdbc/releases/download/$SQLITE_JDBC_VERSION/sqlite-jdbc-$SQLITE_JDBC_VERSION.jar"; \
-  echo "https://raw.githubusercontent.com/tshr20180821/render-07/main/app/phpMyAdmin-${PHPMYADMIN_VERSION}-all-languages.tar.xz"; \
-  echo "https://raw.githubusercontent.com/tshr20180821/render-07/main/app/slf4j-api-2.0.9.jar"; \
-  echo "https://raw.githubusercontent.com/tshr20180821/render-07/main/app/slf4j-nop-2.0.9.jar"; \
-  echo "https://raw.githubusercontent.com/tshr20180821/render-07/main/app/LogOperation.jar"; \
-  echo "https://raw.githubusercontent.com/tshr20180821/render-07/main/app/gpg"; \
-  } >download.txt \
- && xargs -P2 -n1 curl -sSLO <download.txt \
- && apt-get -qq update
-RUN set -x \
- && apt-get install -y --no-install-recommends \
+ && apt-get -qq update \
+ && DEBIAN_FRONTEND=noninteractive apt-get -q install -y --no-install-recommends \
+  build-essential \
+  curl \
   default-jre-headless \
+  gcc-x86-64-linux-gnu \
   iproute2 \
+  libc-client2007e-dev \
+  libfreetype-dev \
+  libgssapi-krb5-2 \
+  libjpeg-dev \
   libkrb5-dev \
+  libmemcached-dev \
   libonig-dev \
-  libpq-dev \
-  libsqlite3-0 \
-  tzdata
-# RUN set -x \
-#  && apt-get install -y --no-install-recommends \
-#   uw-imap-dev
-# RUN set -x \
-#  && pushd /usr/local/src \
-#  && curl -O https://pecl.php.net/get/imap-1.0.3.tgz \
-#  && tar xvzf imap-1.0.3.tgz \
-#  && pushd imap-1.0.3 \
-#  && /usr/local/bin/phpize \
-#  &&
-
-RUN set -x \
- && apt-get upgrade -y --no-install-recommends \
- && apt-get purge -y --auto-remove \
-  gcc \
-  gpgv \
-  libonig-dev \
-  make \
-  re2c \
- && apt-mark auto '.*' >/dev/null \
- && apt-mark manual ${savedAptMark} >/dev/null \
- && find /usr/local -type f -executable -exec ldd '{}' ';' | \
-  awk '/=>/ { so = $(NF-1); if (index(so, "/usr/local/") == 1) { next }; gsub("^/(usr/)?", "", so); print so }' | \
-  sort -u | xargs -r dpkg-query --search | cut -d: -f1 | sort -u | xargs -r apt-mark manual >/dev/null 2>&1 \
- && apt-mark manual \
-  default-jre-headless \
-  iproute2 \
- && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+  libpng-dev \
+  libsasl2-modules \
+  libssl-dev \
+  memcached \
+  sasl2-bin \
+  tzdata \
+  unzip \
+  >/dev/null \
+ && nproc=$(nproc) \
+ && MAKEFLAGS="-j ${nproc}" pecl install apcu >/dev/null \
+ && MAKEFLAGS="-j ${nproc}" pecl install memcached --enable-memcached-sasl >/dev/null \
+ && MAKEFLAGS="-j ${nproc}" pecl install redis >/dev/null \
+ && docker-php-ext-enable \
+  apcu \
+  memcached \
+  redis \
+ && docker-php-ext-configure imap --with-kerberos --with-imap-ssl >/dev/null \
+ && docker-php-ext-install -j${nproc} \
+  mbstring \
+  imap \
+  sockets \
+  >/dev/null \
+ && composer install --apcu-autoloader \
+ && composer suggest \
+ && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --no-install-recommends \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* \
  && mkdir -p /var/www/html/auth \
  && mkdir -p /var/www/html/phpmyadmin \
+ && curl -sS \
+  -LO https://github.com/xerial/sqlite-jdbc/releases/download/$SQLITE_JDBC_VERSION/sqlite-jdbc-$SQLITE_JDBC_VERSION.jar \
+  -LO https://repo1.maven.org/maven2/org/slf4j/slf4j-api/$SLF4J_VERSION/slf4j-api-$SLF4J_VERSION.jar \
+  -LO https://repo1.maven.org/maven2/org/slf4j/slf4j-nop/$SLF4J_VERSION/slf4j-nop-$SLF4J_VERSION.jar \
+  -O https://raw.githubusercontent.com/tshr20180821/render-07/main/app/LogOperation.jar \
  && a2dissite -q 000-default.conf \
  && a2enmod -q \
   authz_groupfile \
+  brotli \
+  proxy \
+  proxy_http \
   rewrite \
- && ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
- && tar xf ./phpMyAdmin-${PHPMYADMIN_VERSION}-all-languages.tar.xz --strip-components=1 -C /var/www/html/phpmyadmin \
- && rm ./phpMyAdmin-${PHPMYADMIN_VERSION}-all-languages.tar.xz ./download.txt ./gpg \
- && chown www-data:www-data /var/www/html/phpmyadmin -R \
- && echo '<HTML />' >/var/www/html/index.html \
- && { \
-  echo 'User-agent: *'; \
-  echo 'Disallow: /'; \
-  } >/var/www/html/robots.txt
+ && mkdir -p /var/php/class \
+ && ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
-COPY ./config.inc.php /var/www/html/phpmyadmin/
-COPY ./class/*.php ./start.sh ./
-COPY --chmod=755 ./log.sh ./
-COPY ./auth/*.php ./auth/*.css /var/www/html/auth/
+# RUN ls -lang /var/www/vendor/
 
-STOPSIGNAL SIGWINCH
+COPY ./config/php.ini ${PHP_INI_DIR}/
 
-ENTRYPOINT ["/bin/bash","/usr/src/app/start.sh"]
+COPY ./www/index.html ./www/robots.txt ./www/*.ico /var/www/html/
+
+COPY --chmod=755 ./*.sh /usr/src/app/
+COPY ./config/apache.conf /etc/apache2/sites-enabled/
+
+COPY ./class/*.php /var/php/class/
+COPY ./www/auth/*.css ./www/auth/*.php /var/www/html/auth/
+COPY ./www/*.php /var/www/html/
+
+COPY ./start.sh /usr/src/app/
+
+# RUN curl -o /tmp/phpliteadmin-dev.zip https://www.phpliteadmin.org/phpliteadmin-dev.zip \
+#  && unzip -d /var/www/html/phpliteadmin phpliteadmin-dev.zip
+
+ENTRYPOINT ["bash","/usr/src/app/start.sh"]
