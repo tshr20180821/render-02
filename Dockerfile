@@ -79,16 +79,16 @@ RUN set -x \
 
 # RUN ls -lang /var/www/vendor/
 
-COPY ./config/php.ini ${PHP_INI_DIR}/
+# COPY ./config/php.ini ${PHP_INI_DIR}/
 
-COPY ./www/index.html ./www/robots.txt ./www/*.ico /var/www/html/
+# COPY ./www/index.html ./www/robots.txt ./www/*.ico /var/www/html/
 
-COPY --chmod=755 ./*.sh /usr/src/app/
-COPY ./config/apache.conf /etc/apache2/sites-enabled/
+# COPY --chmod=755 ./*.sh /usr/src/app/
+# COPY ./config/apache.conf /etc/apache2/sites-enabled/
 
-COPY ./class/*.php /var/php/class/
-COPY ./www/auth/*.css ./www/auth/*.php /var/www/html/auth/
-COPY ./www/*.php /var/www/html/
+# COPY ./class/*.php /var/php/class/
+# COPY ./www/auth/*.css ./www/auth/*.php /var/www/html/auth/
+# COPY ./www/*.php /var/www/html/
 
 COPY ./start.sh /usr/src/app/
 
