@@ -39,6 +39,7 @@ RUN set -x \
   sasl2-bin \
   tzdata \
   unzip \
+  build-essential \
   >/dev/null \
  && nproc=$(nproc) \
  && MAKEFLAGS="-j ${nproc}" pecl install apcu
