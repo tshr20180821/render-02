@@ -26,7 +26,6 @@ RUN set -x \
   default-jre-headless \
   gcc-x86-64-linux-gnu \
   iproute2 \
-  libc-client2007e-dev \
   libfreetype-dev \
   libgssapi-krb5-2 \
   libjpeg-dev \
@@ -41,6 +40,8 @@ RUN set -x \
   tzdata \
   unzip \
   >/dev/null
+
+# libc-client2007e-dev
 
 RUN set -x \
  && nproc=$(nproc) \
