@@ -1,4 +1,4 @@
-FROM php:8.2-apache
+FROM php:8.3-apache
 
 EXPOSE 80
 
@@ -45,8 +45,14 @@ RUN set -x \
 
 RUN set -x \
  && nproc=$(nproc) \
- && MAKEFLAGS="-j ${nproc}" pecl install apcu >/dev/null \
- && MAKEFLAGS="-j ${nproc}" pecl install memcached --enable-memcached-sasl >/dev/null \
+ && MAKEFLAGS="-j ${nproc}" pecl install apcu >/dev/null
+
+RUN set -x \
+ && nproc=$(nproc) \
+ && MAKEFLAGS="-j ${nproc}" pecl install memcached --enable-memcached-sasl >/dev/null
+
+RUN set -x \
+ && nproc=$(nproc) \
  && MAKEFLAGS="-j ${nproc}" pecl install redis >/dev/null
 
 RUN set -x \
