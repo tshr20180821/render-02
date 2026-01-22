@@ -39,6 +39,7 @@ RUN set -x \
   sasl2-bin \
   tzdata \
   unzip \
+  libc-client2007t64-dev \
   >/dev/null
 
 # libc-client2007e-dev
