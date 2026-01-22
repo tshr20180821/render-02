@@ -39,11 +39,7 @@ RUN set -x \
   sasl2-bin \
   tzdata \
   unzip \
-  >/dev/null
-
-# libc-client2007e-dev
-
-RUN set -x \
+  >/dev/null \
  && nproc=$(nproc) \
  && MAKEFLAGS="-j ${nproc}" pecl install apcu
 
