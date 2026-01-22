@@ -45,7 +45,7 @@ RUN set -x \
 
 RUN set -x \
  && nproc=$(nproc) \
- && MAKEFLAGS="-j ${nproc}" pecl install apcu >/dev/null
+ && MAKEFLAGS="-j ${nproc}" pecl install apcu
 
 RUN set -x \
  && nproc=$(nproc) \
