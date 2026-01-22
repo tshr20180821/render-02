@@ -39,7 +39,6 @@ RUN set -x \
   sasl2-bin \
   tzdata \
   unzip \
-  libc-client-dev \
   >/dev/null
 
 # libc-client2007e-dev
@@ -48,7 +47,10 @@ RUN set -x \
  && nproc=$(nproc) \
  && MAKEFLAGS="-j ${nproc}" pecl install apcu >/dev/null \
  && MAKEFLAGS="-j ${nproc}" pecl install memcached --enable-memcached-sasl >/dev/null \
- && MAKEFLAGS="-j ${nproc}" pecl install redis >/dev/null \
+ && MAKEFLAGS="-j ${nproc}" pecl install redis >/dev/null
+
+RUN set -x \
+ && nproc=$(nproc) \
  && docker-php-ext-enable \
   apcu \
   memcached \
@@ -58,7 +60,10 @@ RUN set -x \
   mbstring \
   imap \
   sockets \
-  >/dev/null \
+  >/dev/null
+  
+RUN set -x \
+ && nproc=$(nproc) \
  && composer install --apcu-autoloader \
  && composer suggest \
  && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --no-install-recommends \
